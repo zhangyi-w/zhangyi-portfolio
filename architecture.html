@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SyncSo — System Architecture</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'Inter', -apple-system, sans-serif;
+  background:#f0f2f8;
+  color:#1e293b;
+  min-height:100vh;
+  padding:36px 28px 48px;
+  display:flex;
+  justify-content:center;
+}
+
+.canvas { width:1060px; }
+
+/* ─── Header ─── */
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:14px;
+  padding-bottom:20px;
+  border-bottom:2px solid #e2e8f0;
+}
+.header-left h1 {
+  font-size:24px;
+  font-weight:700;
+  color:#1e3a8a;
+  letter-spacing:-0.5px;
+}
+.header-left .tagline {
+  font-size:12px;
+  color:#64748b;
+  margin-top:5px;
+  font-weight:400;
+  letter-spacing:0.3px;
+}
+.header-right {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:6px;
+}
+.stat-row { display:flex; gap:8px; }
+.stat {
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:6px;
+  padding:5px 12px;
+  font-size:10px;
+  font-weight:600;
+  color:#64748b;
+  letter-spacing:0.3px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+.stat span { color:#2563eb; }
+
+/* ─── Layer container ─── */
+.layer {
+  margin-bottom:6px;
+  position:relative;
+}
+.layer-inner {
+  border:1.5px solid #e2e8f0;
+  border-radius:10px;
+  padding:14px 16px;
+  background:#ffffff;
+  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+}
+.layer-tag {
+  position:absolute;
+  top:-9px;
+  left:16px;
+  font-size:8.5px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:1px 10px;
+  border-radius:20px;
+  border:1px solid;
+}
+
+/* layer accent colours */
+.lc-client  .layer-inner { border-color:#bfdbfe; background:#eff6ff; }
+.lc-client  .layer-tag   { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
+
+.lc-proxy   .layer-inner { border-color:#bbf7d0; background:#f0fdf4; }
+.lc-proxy   .layer-tag   { background:#f0fdf4; border-color:#bbf7d0; color:#15803d; }
+
+.lc-auth    .layer-inner { border-color:#fecdd3; background:#fff1f2; }
+.lc-auth    .layer-tag   { background:#fff1f2; border-color:#fecdd3; color:#be123c; }
+
+.lc-service .layer-inner { border-color:#e9d5ff; background:#faf5ff; }
+.lc-service .layer-tag   { background:#faf5ff; border-color:#e9d5ff; color:#7e22ce; }
+
+.lc-data    .layer-inner { border-color:#fde68a; background:#fefce8; }
+.lc-data    .layer-tag   { background:#fefce8; border-color:#fde68a; color:#92400e; }
+
+.lc-cicd    .layer-inner { border-color:#bae6fd; background:#f0f9ff; }
+.lc-cicd    .layer-tag   { background:#f0f9ff; border-color:#bae6fd; color:#0369a1; }
+
+/* ─── Node card ─── */
+.row { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
+
+.nd {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  background:#ffffff;
+  border:1.5px solid #e2e8f0;
+  border-radius:8px;
+  padding:9px 11px;
+  min-width:90px;
+  flex:1;
+  transition:border-color .15s, box-shadow .15s;
+  cursor:default;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+.nd:hover {
+  border-color:#94a3b8;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.nd .nd-icon {
+  font-size:18px;
+  line-height:1;
+  margin-bottom:1px;
+}
+.nd .nd-name {
+  font-size:10px;
+  font-weight:600;
+  color:#0f172a;
+  line-height:1.3;
+}
+.nd .nd-sub {
+  font-size:8.5px;
+  color:#64748b;
+  line-height:1.4;
+}
+.nd .nd-badge {
+  display:inline-block;
+  margin-top:3px;
+  font-size:7.5px;
+  font-weight:600;
+  padding:1.5px 6px;
+  border-radius:4px;
+  letter-spacing:0.3px;
+  align-self:flex-start;
+}
+.b-blue   { background:#dbeafe; color:#1e40af; }
+.b-green  { background:#dcfce7; color:#166534; }
+.b-orange { background:#ffedd5; color:#9a3412; }
+.b-purple { background:#f3e8ff; color:#6b21a8; }
+.b-yellow { background:#fef9c3; color:#713f12; }
+.b-sky    { background:#e0f2fe; color:#0c4a6e; }
+.b-red    { background:#ffe4e6; color:#9f1239; }
+.b-teal   { background:#ccfbf1; color:#115e59; }
+.b-gray   { background:#f1f5f9; color:#475569; }
+
+/* ─── Mid-row (services + sides) ─── */
+.service-row {
+  display:flex;
+  gap:8px;
+  align-items:stretch;
+}
+.service-center { flex:1; min-width:0; }
+.service-side {
+  width:148px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+/* side group */
+.side-grp {
+  background:#f8fafc;
+  border:1.5px dashed #cbd5e1;
+  border-radius:8px;
+  padding:10px 10px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.side-grp-title {
+  font-size:8px;
+  font-weight:700;
+  color:#64748b;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:2px;
+}
+.snd {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:6px;
+  padding:5px 8px;
+  transition:border-color .15s, box-shadow .15s;
+  cursor:default;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+}
+.snd:hover { border-color:#94a3b8; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.snd .s-icon { font-size:14px; flex-shrink:0; }
+.snd .s-text { display:flex; flex-direction:column; }
+.snd .s-name { font-size:8.5px; font-weight:600; color:#0f172a; }
+.snd .s-sub  { font-size:7.5px; color:#94a3b8; }
+
+/* ─── Connector ─── */
+.conn {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:20px;
+  gap:8px;
+  font-size:10px;
+}
+.conn-line {
+  flex:1;
+  max-width:40px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, #cbd5e1, transparent);
+}
+.conn-arrow {
+  font-size:12px;
+  color:#94a3b8;
+}
+.conn-text {
+  font-size:8px;
+  font-weight:600;
+  color:#94a3b8;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+}
+
+/* ─── Section divider inside service ─── */
+.svc-divider {
+  height:1px;
+  background:#e2e8f0;
+  margin:8px 0;
+}
+
+/* ─── Footer ─── */
+.footer {
+  margin-top:28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:16px;
+  border-top:1px solid #e2e8f0;
+}
+.footer-left { font-size:10px; color:#94a3b8; }
+.footer-right {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.ft {
+  font-size:8.5px;
+  font-weight:500;
+  color:#475569;
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:4px;
+  padding:2px 8px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* ─── Legend ─── */
+.legend {
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.li {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:9px;
+  color:#64748b;
+}
+.li-dot {
+  width:8px;
+  height:8px;
+  border-radius:2px;
+  flex-shrink:0;
+}
+
+/* ─── Video card ─── */
+.video-card {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 55%,#2563eb 100%);
+  border-radius:10px;
+  padding:11px 16px;
+  text-decoration:none;
+  cursor:pointer;
+  border:1px solid #3b82f6;
+  margin-bottom:10px;
+  box-shadow:0 2px 12px rgba(37,99,235,0.25);
+  transition:opacity .15s, box-shadow .15s;
+  position:relative;
+  overflow:hidden;
+}
+.video-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent 50%,rgba(255,255,255,0.04));
+  pointer-events:none;
+}
+.video-card:hover { opacity:.9; box-shadow:0 4px 20px rgba(37,99,235,0.4); }
+.vplay {
+  width:38px; height:38px;
+  background:rgba(255,255,255,0.15);
+  border:1.5px solid rgba(255,255,255,0.3);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.vplay svg { width:14px; height:14px; fill:#fff; margin-left:2px; }
+.vinfo { flex:1; min-width:0; }
+.vlabel { font-size:8px; font-weight:700; color:#93c5fd; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:2px; }
+.vtitle { font-size:13px; font-weight:700; color:#fff; }
+.vsub   { font-size:9px; color:#bfdbfe; margin-top:1px; }
+.vbadge {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:20px; padding:4px 12px; flex-shrink:0;
+}
+.vdot {
+  width:7px; height:7px; border-radius:50%; background:#4ade80;
+  animation:vpulse 1.5s ease-in-out infinite;
+}
+@keyframes vpulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+.vbadge-text { font-size:9px; font-weight:700; color:#bbf7d0; }
+
+/* scrollbar */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:#f0f2f8; }
+::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- ══════════ HEADER ══════════ -->
+  <div class="header">
+    <div class="header-left">
+      <h1>SyncSo — System Architecture</h1>
+      <div class="tagline">
+        Full-Stack Social Product &nbsp;·&nbsp;
+        <span style="font-weight:700;color:#1d4ed8;background:#dbeafe;padding:1px 8px;border-radius:4px;letter-spacing:0.2px;">Zhangyi Wang</span>
+        &nbsp;·&nbsp; Mobile + Backend + Admin + Cloud + AI
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="stat-row">
+        <div class="stat">Users &nbsp;<span>2,000+</span></div>
+        <div class="stat">Platform &nbsp;<span>iOS · Android · Web</span></div>
+        <div class="stat">Runtime &nbsp;<span>AWS EC2 + Docker</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat">Backend &nbsp;<span>Java 11 · Spring Boot 2.4</span></div>
+        <div class="stat">DB &nbsp;<span>MongoDB</span></div>
+        <div class="stat">CI/CD &nbsp;<span>GitHub Actions → ECR</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ VIDEO LINK ══════════ -->
+  <a class="video-card"
+     href="https://drive.google.com/file/d/1qkjEHnDjHaO6iA5ren-EMEqqXrYHlT2g/view?usp=sharing"
+     target="_blank" rel="noopener noreferrer">
+    <div class="vplay">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+    <div class="vinfo">
+      <div class="vlabel">▶ Live Product Walkthrough</div>
+      <div class="vtitle">SyncSo — Production App &nbsp;·&nbsp; 2,000+ Active Users</div>
+      <div class="vsub">Mobile App · Spring Boot Backend · Admin Dashboard · Realtime Chat · Maps · AI Features</div>
+    </div>
+    <div class="vbadge">
+      <div class="vdot"></div>
+      <span class="vbadge-text">Watch Now</span>
+    </div>
+  </a>
+
+  <div style="height:10px;"></div>
+
+  <!-- ══════════ LAYER 1: CLIENT ══════════ -->
+  <div class="layer lc-client">
+    <div class="layer-tag">Client Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">📱</div>
+          <div class="nd-name">iOS Application</div>
+          <div class="nd-sub">React Native 0.73 · Expo 50<br/>Hermes JS engine · CocoaPods</div>
+          <div class="nd-badge b-blue">Swift native layer</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🤖</div>
+          <div class="nd-name">Android Application</div>
+          <div class="nd-sub">React Native 0.73 · Expo 50<br/>Hermes JS engine · Gradle</div>
+          <div class="nd-badge b-green">Google Services</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🖥️</div>
+          <div class="nd-name">Admin Dashboard</div>
+          <div class="nd-sub">React 19 · Vite 6<br/>Tailwind CSS 4 · React Router 7</div>
+          <div class="nd-badge b-purple">Internal Ops</div>
+        </div>
+        <div class="nd" style="max-width:200px;">
+          <div class="nd-icon">📦</div>
+          <div class="nd-name">Mobile State Management</div>
+          <div class="nd-sub">Redux Toolkit · redux-thunk<br/>AsyncStorage · React Navigation</div>
+          <div class="nd-badge b-sky">Redux slices: auth · event · home · me · message · friend</div>
+        </div>
+        <div class="nd" style="max-width:160px;">
+          <div class="nd-icon">🚀</div>
+          <div class="nd-name">OTA Updates</div>
+          <div class="nd-sub">Expo EAS Build · expo-updates<br/>EAS Submit · eas.json profiles</div>
+          <div class="nd-badge b-orange">Live updates</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">HTTPS / REST · WebSocket</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 2: PROXY ══════════ -->
+  <div class="layer lc-proxy">
+    <div class="layer-tag">Reverse Proxy &amp; Hosting Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🌐</div>
+          <div class="nd-name">Nginx</div>
+          <div class="nd-sub">SSL termination · Port 443<br/>Reverse proxy to :8080</div>
+          <div class="nd-badge b-green">Let's Encrypt TLS</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🟩</div>
+          <div class="nd-name">Express + Node</div>
+          <div class="nd-sub">Static file hosting · Port 3133<br/>serve-3133.js · SPA fallback</div>
+          <div class="nd-badge b-green">Admin Web hosting</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🔀</div>
+          <div class="nd-name">API Proxy</div>
+          <div class="nd-sub">http-proxy-middleware<br/>/api → backend passthrough</div>
+          <div class="nd-badge b-sky">changeOrigin · HTTPS</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🛠️</div>
+          <div class="nd-name">Ops Automation</div>
+          <div class="nd-sub">certbot auto-renewal<br/>Docker graceful restart · cron</div>
+          <div class="nd-badge b-gray">Shell scripts · logrotate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Filtered request pipeline</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 3: AUTH ══════════ -->
+  <div class="layer lc-auth">
+    <div class="layer-tag">Security &amp; Authentication Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🔐</div>
+          <div class="nd-name">Spring Security</div>
+          <div class="nd-sub">Filter chain · SecurityConfig<br/>Stateless session policy</div>
+          <div class="nd-badge b-orange">OncePerRequestFilter</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🪙</div>
+          <div class="nd-name">JWT</div>
+          <div class="nd-sub">TokenProvider · TokenAuthFilter<br/>JJWT 0.9 · Bearer tokens</div>
+          <div class="nd-badge b-orange">Stateless auth</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🔑</div>
+          <div class="nd-name">OAuth2 Client</div>
+          <div class="nd-sub">Google SSO · Facebook SSO<br/>spring-security-oauth2-client</div>
+          <div class="nd-badge b-orange">Third-party login</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🛡️</div>
+          <div class="nd-name">Method Security</div>
+          <div class="nd-sub">@PreAuthorize · RBAC<br/>BCryptPasswordEncoder</div>
+          <div class="nd-badge b-red">Role-based access</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📋</div>
+          <div class="nd-name">Bean Validation</div>
+          <div class="nd-sub">javax.validation API<br/>@Valid · @NotBlank · @NotNull</div>
+          <div class="nd-badge b-orange">Request validation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Authenticated request</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 4: SERVICES (+ sides) ══════════ -->
+  <div class="layer lc-service">
+    <div class="layer-tag">Core Business Service Layer (Spring Boot 2.4 · Maven Multi-module)</div>
+    <div class="layer-inner">
+      <div class="service-row">
+
+        <!-- LEFT SIDE -->
+        <div class="service-side">
+          <div class="side-grp">
+            <div class="side-grp-title">Notification Services</div>
+            <div class="snd"><div class="s-icon">🔥</div><div class="s-text"><div class="s-name">Firebase FCM</div><div class="s-sub">Push · Topic / token</div></div></div>
+            <div class="snd"><div class="s-icon">☁️</div><div class="s-text"><div class="s-name">AWS SNS</div><div class="s-sub">SMS · Alerts</div></div></div>
+            <div class="snd"><div class="s-icon">📍</div><div class="s-text"><div class="s-name">AWS Pinpoint</div><div class="s-sub">SMS OTP · Marketing</div></div></div>
+            <div class="snd"><div class="s-icon">📧</div><div class="s-text"><div class="s-name">JavaMailSender</div><div class="s-sub">Email verification</div></div></div>
+            <div class="snd"><div class="s-icon">📲</div><div class="s-text"><div class="s-name">Notifee (mobile)</div><div class="s-sub">Local notifications</div></div></div>
+          </div>
+          <div class="side-grp">
+            <div class="side-grp-title">AI / Intelligence</div>
+            <div class="snd"><div class="s-icon">🧠</div><div class="s-text"><div class="s-name">OpenAI GPT</div><div class="s-sub">Completions API</div></div></div>
+            <div class="snd"><div class="s-icon">📐</div><div class="s-text"><div class="s-name">Embedding Service</div><div class="s-sub">User + event vectors</div></div></div>
+            <div class="snd"><div class="s-icon">✍️</div><div class="s-text"><div class="s-name">Bio / Emoji Gen</div><div class="s-sub">AI content generation</div></div></div>
+          </div>
+        </div>
+
+        <!-- CENTER SERVICES -->
+        <div class="service-center">
+          <!-- Row A: Primary services -->
+          <div class="row">
+            <div class="nd">
+              <div class="nd-icon">👤</div>
+              <div class="nd-name">User Service</div>
+              <div class="nd-sub">Profile · Social graph<br/>Follow · Prompts · Photos</div>
+              <div class="nd-badge b-purple">MongoDB CRUD</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">📅</div>
+              <div class="nd-name">Event Service</div>
+              <div class="nd-sub">Create · RSVP · Invite<br/>Location · Calendar</div>
+              <div class="nd-badge b-purple">Geo indexed</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🔍</div>
+              <div class="nd-name">Discovery Service</div>
+              <div class="nd-sub">ForYou feed · Swipe<br/>Embedding-based ranking</div>
+              <div class="nd-badge b-teal">AI-enhanced</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🚨</div>
+              <div class="nd-name">Report Service</div>
+              <div class="nd-sub">User · Event reports<br/>Admin moderation</div>
+              <div class="nd-badge b-red">Moderation</div>
+            </div>
+          </div>
+          <div class="svc-divider"></div>
+          <!-- Row B: Secondary services -->
+          <div class="row">
+            <div class="nd">
+              <div class="nd-icon">💬</div>
+              <div class="nd-name">Chat Service</div>
+              <div class="nd-sub">Spring WebSocket · STOMP<br/>1:1 · group messaging</div>
+              <div class="nd-badge b-sky">Realtime · SockJS</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">📢</div>
+              <div class="nd-name">Broadcast Service</div>
+              <div class="nd-sub">SMS campaigns<br/>Audience builder · Templates</div>
+              <div class="nd-badge b-purple">Ops tooling</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">📊</div>
+              <div class="nd-name">Metrics &amp; Observability</div>
+              <div class="nd-sub">Spring Actuator · Micrometer<br/>Prometheus registry</div>
+              <div class="nd-badge b-gray">Custom counters</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🕐</div>
+              <div class="nd-name">Async &amp; Scheduler</div>
+              <div class="nd-sub">@Scheduled jobs<br/>@Async thread pool · AsyncConfig</div>
+              <div class="nd-badge b-yellow">Background tasks</div>
+            </div>
+          </div>
+          <div class="svc-divider"></div>
+          <!-- Row C: Shared modules -->
+          <div class="row">
+            <div class="nd">
+              <div class="nd-icon">📦</div>
+              <div class="nd-name">commons module</div>
+              <div class="nd-sub">Shared DTOs · contracts<br/>Exceptions · utils</div>
+              <div class="nd-badge b-gray">Shared library</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🗄️</div>
+              <div class="nd-name">dal module</div>
+              <div class="nd-sub">MongoRepository<br/>MongoTemplate impls</div>
+              <div class="nd-badge b-yellow">Data access layer</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🐦</div>
+              <div class="nd-name">canary module</div>
+              <div class="nd-sub">Health probe<br/>Deployment validation</div>
+              <div class="nd-badge b-green">Canary checks</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🧪</div>
+              <div class="nd-name">integration-test module</div>
+              <div class="nd-sub">TestNG · Java HttpClient<br/>Endpoint smoke tests</div>
+              <div class="nd-badge b-gray">E2E validation</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="service-side">
+          <div class="side-grp">
+            <div class="side-grp-title">Cloud Storage &amp; Infra</div>
+            <div class="snd"><div class="s-icon">🗂️</div><div class="s-text"><div class="s-name">AWS S3</div><div class="s-sub">Media · images · files</div></div></div>
+            <div class="snd"><div class="s-icon">📦</div><div class="s-text"><div class="s-name">AWS ECR</div><div class="s-sub">Docker image registry</div></div></div>
+          </div>
+          <div class="side-grp">
+            <div class="side-grp-title">External Platforms</div>
+            <div class="snd"><div class="s-icon">📅</div><div class="s-text"><div class="s-name">Google Calendar</div><div class="s-sub">Read / write events</div></div></div>
+            <div class="snd"><div class="s-icon">🗺️</div><div class="s-text"><div class="s-name">Google Maps</div><div class="s-sub">Place · geocoding</div></div></div>
+            <div class="snd"><div class="s-icon">🔑</div><div class="s-text"><div class="s-name">Google OAuth</div><div class="s-sub">SSO · auth tokens</div></div></div>
+            <div class="snd"><div class="s-icon">💬</div><div class="s-text"><div class="s-name">Easemob IM SDK</div><div class="s-sub">Chat · groups · contacts</div></div></div>
+            <div class="snd"><div class="s-icon">📄</div><div class="s-text"><div class="s-name">Jsoup · Apache POI</div><div class="s-sub">HTML parse · Excel export</div></div></div>
+            <div class="snd"><div class="s-icon">📐</div><div class="s-text"><div class="s-name">ZXing</div><div class="s-sub">QR code generation</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">MongoDB driver · Spring Data</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 5: DATA ══════════ -->
+  <div class="layer lc-data">
+    <div class="layer-tag">Data Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🍃</div>
+          <div class="nd-name">MongoDB</div>
+          <div class="nd-sub">Primary document database<br/>@Document entities · indexes</div>
+          <div class="nd-badge b-yellow">Users · Events · Messages · Relationships</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📁</div>
+          <div class="nd-name">Spring Data MongoDB</div>
+          <div class="nd-sub">MongoRepository interfaces<br/>MongoTemplate custom impls</div>
+          <div class="nd-badge b-yellow">Criteria / Query builders</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🌍</div>
+          <div class="nd-name">Geospatial Queries</div>
+          <div class="nd-sub">Geo near · 2dsphere index<br/>Location-based discovery</div>
+          <div class="nd-badge b-teal">Aggregation pipelines</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">⚡</div>
+          <div class="nd-name">Caffeine Cache</div>
+          <div class="nd-sub">In-memory L1 cache<br/>Place photos · TTL eviction</div>
+          <div class="nd-badge b-yellow">github.com/ben-manes/caffeine</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">💾</div>
+          <div class="nd-name">Client-side Persistence</div>
+          <div class="nd-sub">AsyncStorage · Redux state<br/>Tokens · flags · drafts</div>
+          <div class="nd-badge b-sky">Mobile state persistence</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Build · package · deploy</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 6: CI/CD ══════════ -->
+  <div class="layer lc-cicd">
+    <div class="layer-tag">CI / CD &amp; Delivery Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">⚙️</div>
+          <div class="nd-name">GitHub Actions</div>
+          <div class="nd-sub">build.yml · ecr.yml<br/>Maven build → Docker → ECR</div>
+          <div class="nd-badge b-sky">Push to main triggers</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🐳</div>
+          <div class="nd-name">Docker</div>
+          <div class="nd-sub">api/Dockerfile · chat Dockerfile<br/>OpenJDK 11 · linux/amd64</div>
+          <div class="nd-badge b-sky">Multi-service containers</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📦</div>
+          <div class="nd-name">AWS ECR</div>
+          <div class="nd-sub">Image registry · us-west-2<br/>COMMIT_SHA tagging strategy</div>
+          <div class="nd-badge b-sky">637423...amazonaws.com</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🖥️</div>
+          <div class="nd-name">EC2 Runtime</div>
+          <div class="nd-sub">Docker pull + run · release.sh<br/>Port 8080 · SSH deploy</div>
+          <div class="nd-badge b-green">Production server</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📱</div>
+          <div class="nd-name">Expo EAS</div>
+          <div class="nd-sub">iOS · Android builds<br/>OTA via expo-updates</div>
+          <div class="nd-badge b-blue">eas.json profiles</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🐙</div>
+          <div class="nd-name">Docker Compose</div>
+          <div class="nd-sub">docker-compose-3133.yml<br/>Admin web container</div>
+          <div class="nd-badge b-sky">syncso-mgr-web:3133</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ LEGEND ══════════ -->
+  <div class="legend">
+    <div class="li"><div class="li-dot" style="background:#bfdbfe;border:1px solid #93c5fd;"></div>Client Layer</div>
+    <div class="li"><div class="li-dot" style="background:#bbf7d0;border:1px solid #86efac;"></div>Proxy / Hosting</div>
+    <div class="li"><div class="li-dot" style="background:#fecdd3;border:1px solid #fda4af;"></div>Auth / Security</div>
+    <div class="li"><div class="li-dot" style="background:#e9d5ff;border:1px solid #d8b4fe;"></div>Business Services</div>
+    <div class="li"><div class="li-dot" style="background:#fde68a;border:1px solid #fcd34d;"></div>Data Layer</div>
+    <div class="li"><div class="li-dot" style="background:#bae6fd;border:1px solid #7dd3fc;"></div>CI/CD &amp; Delivery</div>
+    <div class="li"><div class="li-dot" style="background:#f1f5f9;border:1px dashed #cbd5e1;"></div>External Integration</div>
+  </div>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <div class="footer">
+    <div class="footer-left"><span style="font-weight:700;color:#2563eb;">Zhangyi Wang</span> · SyncSo Platform · 2,000+ Users · Live Production</div>
+    <div class="footer-right">
+      <div class="ft">Java 11</div><div class="ft">Spring Boot 2.4</div>
+      <div class="ft">MongoDB</div><div class="ft">React Native 0.73</div>
+      <div class="ft">Expo 50</div><div class="ft">React 19</div>
+      <div class="ft">Docker</div><div class="ft">AWS</div>
+      <div class="ft">Firebase</div><div class="ft">OpenAI</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
