@@ -1,1073 +1,810 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Technical Summary — SyncSo Full-Stack Product Engineering</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+<head>
+<meta charset="UTF-8"/>
+<title>SyncSo — System Architecture</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-      body {
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-        background: #f5f6fa;
-        color: #1a1a2e;
-        font-size: 11px;
-        line-height: 1.5;
-      }
+body {
+  font-family:'Inter', -apple-system, sans-serif;
+  background:#f0f2f8;
+  color:#1e293b;
+  min-height:100vh;
+  padding:36px 28px 48px;
+  display:flex;
+  justify-content:center;
+}
 
-      .page {
-        width: 210mm;
-        min-height: 297mm;
-        margin: 0 auto;
-        background: #ffffff;
-        padding: 14mm 16mm 12mm 16mm;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
+.canvas { width:1060px; }
 
-      /* ── Header ── */
-      .header {
-        border-bottom: 3px solid #2563eb;
-        padding-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-      }
-      .header-left h1 {
-        font-size: 20px;
-        font-weight: 700;
-        color: #1e3a8a;
-        letter-spacing: -0.5px;
-      }
-      .header-left .subtitle {
-        font-size: 11px;
-        color: #64748b;
-        margin-top: 2px;
-        font-weight: 400;
-      }
-      .header-right {
-        text-align: right;
-        font-size: 10px;
-        color: #64748b;
-        line-height: 1.7;
-      }
-      .header-right .role-badge {
-        display: inline-block;
-        background: #2563eb;
-        color: #fff;
-        font-size: 9px;
-        font-weight: 600;
-        padding: 2px 8px;
-        border-radius: 20px;
-        margin-bottom: 3px;
-        letter-spacing: 0.5px;
-      }
-      .company-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        background: #f0f4ff;
-        border: 1.5px solid #c7d7ff;
-        border-radius: 20px;
-        padding: 2px 9px 2px 6px;
-        margin-bottom: 3px;
-      }
-      .company-badge-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: linear-gradient(
-          135deg,
-          #f25022 25%,
-          #7fba00 25%,
-          #7fba00 50%,
-          #00a4ef 50%,
-          #00a4ef 75%,
-          #ffb900 75%
-        );
-        flex-shrink: 0;
-      }
-      .company-badge-text {
-        font-size: 9px;
-        font-weight: 700;
-        color: #1e3a8a;
-        letter-spacing: 0.3px;
-      }
-      .candidate-name {
-        font-size: 13px;
-        font-weight: 700;
-        color: #1e3a8a;
-        letter-spacing: -0.3px;
-      }
-      .candidate-label {
-        font-size: 8.5px;
-        color: #94a3b8;
-        font-weight: 400;
-      }
+/* ─── Header ─── */
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:14px;
+  padding-bottom:20px;
+  border-bottom:2px solid #e2e8f0;
+}
+.header-left h1 {
+  font-size:24px;
+  font-weight:700;
+  color:#1e3a8a;
+  letter-spacing:-0.5px;
+}
+.header-left .tagline {
+  font-size:12px;
+  color:#64748b;
+  margin-top:5px;
+  font-weight:400;
+  letter-spacing:0.3px;
+}
+.header-right {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:6px;
+}
+.stat-row { display:flex; gap:8px; }
+.stat {
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:6px;
+  padding:5px 12px;
+  font-size:10px;
+  font-weight:600;
+  color:#64748b;
+  letter-spacing:0.3px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+.stat span { color:#2563eb; }
 
-      /* ── Grid layout ── */
-      .grid-3 {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 8px;
-      }
-      .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-      .grid-4 {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: 8px;
-      }
+/* ─── Layer container ─── */
+.layer {
+  margin-bottom:6px;
+  position:relative;
+}
+.layer-inner {
+  border:1.5px solid #e2e8f0;
+  border-radius:10px;
+  padding:14px 16px;
+  background:#ffffff;
+  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+}
+.layer-tag {
+  position:absolute;
+  top:-9px;
+  left:16px;
+  font-size:8.5px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:1px 10px;
+  border-radius:20px;
+  border:1px solid;
+}
 
-      /* ── Cards ── */
-      .card {
-        border-radius: 8px;
-        padding: 9px 10px;
-        border: 1px solid #e2e8f0;
-      }
-      .card-header {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        margin-bottom: 6px;
-      }
-      .card-icon {
-        font-size: 13px;
-        line-height: 1;
-      }
-      .card-title {
-        font-size: 10.5px;
-        font-weight: 700;
-        letter-spacing: 0.2px;
-      }
-      .card-sub {
-        font-size: 9px;
-        color: #94a3b8;
-        font-weight: 400;
-        margin-left: 2px;
-      }
+/* layer accent colours */
+.lc-client  .layer-inner { border-color:#bfdbfe; background:#eff6ff; }
+.lc-client  .layer-tag   { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
 
-      /* Card colour themes */
-      .card-mobile {
-        background: #eff6ff;
-        border-color: #bfdbfe;
-      }
-      .card-mobile .card-title {
-        color: #1d4ed8;
-      }
+.lc-proxy   .layer-inner { border-color:#bbf7d0; background:#f0fdf4; }
+.lc-proxy   .layer-tag   { background:#f0fdf4; border-color:#bbf7d0; color:#15803d; }
 
-      .card-backend {
-        background: #fff1f2;
-        border-color: #fecdd3;
-      }
-      .card-backend .card-title {
-        color: #be123c;
-      }
+.lc-auth    .layer-inner { border-color:#fecdd3; background:#fff1f2; }
+.lc-auth    .layer-tag   { background:#fff1f2; border-color:#fecdd3; color:#be123c; }
 
-      .card-web {
-        background: #f0fdf4;
-        border-color: #bbf7d0;
-      }
-      .card-web .card-title {
-        color: #15803d;
-      }
+.lc-service .layer-inner { border-color:#e9d5ff; background:#faf5ff; }
+.lc-service .layer-tag   { background:#faf5ff; border-color:#e9d5ff; color:#7e22ce; }
 
-      .card-data {
-        background: #faf5ff;
-        border-color: #e9d5ff;
-      }
-      .card-data .card-title {
-        color: #7e22ce;
-      }
+.lc-data    .layer-inner { border-color:#fde68a; background:#fefce8; }
+.lc-data    .layer-tag   { background:#fefce8; border-color:#fde68a; color:#92400e; }
 
-      .card-ext {
-        background: #fff7ed;
-        border-color: #fed7aa;
-      }
-      .card-ext .card-title {
-        color: #c2410c;
-      }
+.lc-cicd    .layer-inner { border-color:#bae6fd; background:#f0f9ff; }
+.lc-cicd    .layer-tag   { background:#f0f9ff; border-color:#bae6fd; color:#0369a1; }
 
-      .card-infra {
-        background: #f0f9ff;
-        border-color: #bae6fd;
-      }
-      .card-infra .card-title {
-        color: #0369a1;
-      }
+/* ─── Node card ─── */
+.row { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
 
-      .card-ai {
-        background: #fefce8;
-        border-color: #fde68a;
-      }
-      .card-ai .card-title {
-        color: #92400e;
-      }
+.nd {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  background:#ffffff;
+  border:1.5px solid #e2e8f0;
+  border-radius:8px;
+  padding:9px 11px;
+  min-width:90px;
+  flex:1;
+  transition:border-color .15s, box-shadow .15s;
+  cursor:default;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+.nd:hover {
+  border-color:#94a3b8;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.nd .nd-icon {
+  font-size:18px;
+  line-height:1;
+  margin-bottom:1px;
+}
+.nd .nd-name {
+  font-size:10px;
+  font-weight:600;
+  color:#0f172a;
+  line-height:1.3;
+}
+.nd .nd-sub {
+  font-size:8.5px;
+  color:#64748b;
+  line-height:1.4;
+}
+.nd .nd-badge {
+  display:inline-block;
+  margin-top:3px;
+  font-size:7.5px;
+  font-weight:600;
+  padding:1.5px 6px;
+  border-radius:4px;
+  letter-spacing:0.3px;
+  align-self:flex-start;
+}
+.b-blue   { background:#dbeafe; color:#1e40af; }
+.b-green  { background:#dcfce7; color:#166534; }
+.b-orange { background:#ffedd5; color:#9a3412; }
+.b-purple { background:#f3e8ff; color:#6b21a8; }
+.b-yellow { background:#fef9c3; color:#713f12; }
+.b-sky    { background:#e0f2fe; color:#0c4a6e; }
+.b-red    { background:#ffe4e6; color:#9f1239; }
+.b-teal   { background:#ccfbf1; color:#115e59; }
+.b-gray   { background:#f1f5f9; color:#475569; }
 
-      .card-skills {
-        background: #1e3a8a;
-        border-color: #1e3a8a;
-      }
-      .card-skills .card-title {
-        color: #93c5fd;
-      }
-      .card-skills .tag {
-        background: #2563eb;
-        color: #dbeafe;
-      }
+/* ─── Mid-row (services + sides) ─── */
+.service-row {
+  display:flex;
+  gap:8px;
+  align-items:stretch;
+}
+.service-center { flex:1; min-width:0; }
+.service-side {
+  width:148px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
 
-      /* ── Tag pills ── */
-      .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3px;
-      }
-      .tag {
-        display: inline-block;
-        background: #e2e8f0;
-        color: #334155;
-        font-size: 8.5px;
-        font-weight: 500;
-        padding: 1.5px 6px;
-        border-radius: 20px;
-        white-space: nowrap;
-      }
-      .tag-blue {
-        background: #dbeafe;
-        color: #1e40af;
-      }
-      .tag-red {
-        background: #ffe4e6;
-        color: #9f1239;
-      }
-      .tag-green {
-        background: #dcfce7;
-        color: #166534;
-      }
-      .tag-purple {
-        background: #f3e8ff;
-        color: #6b21a8;
-      }
-      .tag-orange {
-        background: #ffedd5;
-        color: #9a3412;
-      }
-      .tag-sky {
-        background: #e0f2fe;
-        color: #0c4a6e;
-      }
-      .tag-yellow {
-        background: #fef9c3;
-        color: #713f12;
-      }
-      .tag-dark {
-        background: #1e3a8a;
-        color: #dbeafe;
-      }
+/* side group */
+.side-grp {
+  background:#f8fafc;
+  border:1.5px dashed #cbd5e1;
+  border-radius:8px;
+  padding:10px 10px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.side-grp-title {
+  font-size:8px;
+  font-weight:700;
+  color:#64748b;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:2px;
+}
+.snd {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:6px;
+  padding:5px 8px;
+  transition:border-color .15s, box-shadow .15s;
+  cursor:default;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+}
+.snd:hover { border-color:#94a3b8; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.snd .s-icon { font-size:14px; flex-shrink:0; }
+.snd .s-text { display:flex; flex-direction:column; }
+.snd .s-name { font-size:8.5px; font-weight:600; color:#0f172a; }
+.snd .s-sub  { font-size:7.5px; color:#94a3b8; }
 
-      /* ── Section label ── */
-      .section-label {
-        font-size: 9px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        color: #94a3b8;
-        margin-bottom: 5px;
-      }
+/* ─── Connector ─── */
+.conn {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:20px;
+  gap:8px;
+  font-size:10px;
+}
+.conn-line {
+  flex:1;
+  max-width:40px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, #cbd5e1, transparent);
+}
+.conn-arrow {
+  font-size:12px;
+  color:#94a3b8;
+}
+.conn-text {
+  font-size:8px;
+  font-weight:600;
+  color:#94a3b8;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+}
 
-      /* ── Architecture flow strip ── */
-      .arch-strip {
-        background: #1e293b;
-        border-radius: 8px;
-        padding: 8px 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 4px;
-      }
-      .arch-node {
-        background: #334155;
-        border-radius: 6px;
-        padding: 5px 8px;
-        text-align: center;
-        flex: 1;
-        min-width: 0;
-      }
-      .arch-node .aname {
-        font-size: 8.5px;
-        font-weight: 700;
-        color: #f8fafc;
-        display: block;
-      }
-      .arch-node .atech {
-        font-size: 7.5px;
-        color: #94a3b8;
-        display: block;
-        margin-top: 1px;
-      }
-      .arch-arrow {
-        color: #475569;
-        font-size: 14px;
-        flex-shrink: 0;
-      }
-      .arch-node.highlight {
-        background: #2563eb;
-      }
-      .arch-node.highlight .atech {
-        color: #bfdbfe;
-      }
+/* ─── Section divider inside service ─── */
+.svc-divider {
+  height:1px;
+  background:#e2e8f0;
+  margin:8px 0;
+}
 
-      /* ── Pipeline row ── */
-      .pipeline {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        flex-wrap: nowrap;
-        overflow: hidden;
-      }
-      .pipe-step {
-        background: #f1f5f9;
-        border: 1px solid #e2e8f0;
-        border-radius: 5px;
-        padding: 3px 7px;
-        font-size: 8px;
-        font-weight: 600;
-        color: #334155;
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
-      .pipe-arrow {
-        color: #cbd5e1;
-        font-size: 10px;
-        flex-shrink: 0;
-      }
+/* ─── Footer ─── */
+.footer {
+  margin-top:28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:16px;
+  border-top:1px solid #e2e8f0;
+}
+.footer-left { font-size:10px; color:#94a3b8; }
+.footer-right {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.ft {
+  font-size:8.5px;
+  font-weight:500;
+  color:#475569;
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:4px;
+  padding:2px 8px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+}
 
-      /* ── Feature list ── */
-      .feat-list {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-      .feat-item {
-        font-size: 8.5px;
-        color: #475569;
-        padding-left: 10px;
-        position: relative;
-      }
-      .feat-item::before {
-        content: "▸";
-        position: absolute;
-        left: 0;
-        color: #94a3b8;
-        font-size: 8px;
-      }
+/* ─── Legend ─── */
+.legend {
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.li {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:9px;
+  color:#64748b;
+}
+.li-dot {
+  width:8px;
+  height:8px;
+  border-radius:2px;
+  flex-shrink:0;
+}
 
-      /* ── Footer ── */
-      .footer {
-        border-top: 1px solid #e2e8f0;
-        padding-top: 7px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .footer-left {
-        font-size: 9px;
-        color: #94a3b8;
-      }
-      .footer-right {
-        font-size: 9px;
-        color: #64748b;
-        font-weight: 500;
-      }
+/* ─── Video card ─── */
+.video-card {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 55%,#2563eb 100%);
+  border-radius:10px;
+  padding:11px 16px;
+  text-decoration:none;
+  cursor:pointer;
+  border:1px solid #3b82f6;
+  margin-bottom:10px;
+  box-shadow:0 2px 12px rgba(37,99,235,0.25);
+  transition:opacity .15s, box-shadow .15s;
+  position:relative;
+  overflow:hidden;
+}
+.video-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent 50%,rgba(255,255,255,0.04));
+  pointer-events:none;
+}
+.video-card:hover { opacity:.9; box-shadow:0 4px 20px rgba(37,99,235,0.4); }
+.vplay {
+  width:38px; height:38px;
+  background:rgba(255,255,255,0.15);
+  border:1.5px solid rgba(255,255,255,0.3);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.vplay svg { width:14px; height:14px; fill:#fff; margin-left:2px; }
+.vinfo { flex:1; min-width:0; }
+.vlabel { font-size:8px; font-weight:700; color:#93c5fd; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:2px; }
+.vtitle { font-size:13px; font-weight:700; color:#fff; }
+.vsub   { font-size:9px; color:#bfdbfe; margin-top:1px; }
+.vbadge {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:20px; padding:4px 12px; flex-shrink:0;
+}
+.vdot {
+  width:7px; height:7px; border-radius:50%; background:#4ade80;
+  animation:vpulse 1.5s ease-in-out infinite;
+}
+@keyframes vpulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+.vbadge-text { font-size:9px; font-weight:700; color:#bbf7d0; }
 
-      /* ── Video Card ── */
-      .video-card {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: linear-gradient(
-          135deg,
-          #0f172a 0%,
-          #1e3a8a 60%,
-          #1d4ed8 100%
-        );
-        border-radius: 8px;
-        padding: 10px 14px;
-        text-decoration: none;
-        cursor: pointer;
-        border: 1px solid #2563eb;
-        transition: opacity 0.15s;
-        position: relative;
-        overflow: hidden;
-      }
-      .video-card::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          90deg,
-          transparent 60%,
-          rgba(255, 255, 255, 0.04)
-        );
-        pointer-events: none;
-      }
-      .video-card:hover {
-        opacity: 0.88;
-      }
-      .video-play-btn {
-        width: 36px;
-        height: 36px;
-        background: #2563eb;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
-      }
-      .video-play-btn svg {
-        width: 14px;
-        height: 14px;
-        fill: #fff;
-        margin-left: 2px;
-      }
-      .video-info {
-        flex: 1;
-        min-width: 0;
-      }
-      .video-label {
-        font-size: 8px;
-        font-weight: 700;
-        color: #60a5fa;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 2px;
-      }
-      .video-title {
-        font-size: 11px;
-        font-weight: 700;
-        color: #f8fafc;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .video-desc {
-        font-size: 8.5px;
-        color: #94a3b8;
-        margin-top: 1px;
-      }
-      .video-badge {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 20px;
-        padding: 3px 8px;
-        flex-shrink: 0;
-      }
-      .video-badge-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #22c55e;
-        animation: pulse-dot 1.5s ease-in-out infinite;
-      }
-      .video-badge-text {
-        font-size: 8px;
-        font-weight: 600;
-        color: #86efac;
-        white-space: nowrap;
-      }
-      @keyframes pulse-dot {
-        0%,
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 0.5;
-          transform: scale(0.8);
-        }
-      }
+/* scrollbar */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:#f0f2f8; }
+::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+</style>
+</head>
+<body>
+<div class="canvas">
 
-      /* ── Print ── */
-      @media print {
-        body {
-          background: #fff;
-        }
-        .page {
-          margin: 0;
-          padding: 12mm 14mm 10mm 14mm;
-          box-shadow: none;
-          min-height: 0;
-        }
-      }
+  <!-- ══════════ NAV ══════════ -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+    <a href="tech-summary.html"
+       style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+              background:#ffffff;border:1.5px solid #e2e8f0;border-radius:8px;
+              padding:6px 14px;font-size:10px;font-weight:600;color:#475569;
+              box-shadow:0 1px 3px rgba(0,0,0,0.06);transition:all .15s;"
+       onmouseover="this.style.borderColor='#94a3b8';this.style.color='#1e3a8a'"
+       onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#475569'">
+      <span style="font-size:12px;">📋</span> View Tech Summary →
+    </a>
+  </div>
 
-      @page {
-        size: A4;
-        margin: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="page">
-      <!-- ════════ HEADER ════════ -->
-      <div class="header">
-        <div class="header-left">
-          <h1>Zhangyi Wang - Co-founder of SyncSo</h1>
-          <div class="subtitle">
-            SyncSo · Social Event &amp; Messaging Platform · Technical Summary
-          </div>
-          <div style="display:inline-flex;align-items:center;gap:5px;margin-top:5px;background:linear-gradient(90deg,#dcfce7,#bbf7d0);border:1.5px solid #86efac;border-radius:20px;padding:2px 10px 2px 7px;">
-            <span style="font-size:11px;">🚀</span>
-            <span style="font-size:9px;font-weight:700;color:#15803d;letter-spacing:0.3px;">Live Product &nbsp;·&nbsp; Over 2,000 Active Users</span>
-          </div>
-        </div>
-        <div class="header-right">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-            <div style="font-size:9px;font-weight:700;color:#1e3a8a;letter-spacing:0.5px;text-transform:uppercase;">Full-Stack Engineer</div>
-            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:120px;">
-              <span style="background:#dbeafe;color:#1e40af;font-size:8px;font-weight:600;padding:2px 7px;border-radius:20px;">Mobile</span>
-              <span style="background:#dcfce7;color:#166534;font-size:8px;font-weight:600;padding:2px 7px;border-radius:20px;">Backend</span>
-              <span style="background:#fef9c3;color:#713f12;font-size:8px;font-weight:600;padding:2px 7px;border-radius:20px;">AI</span>
-              <span style="background:#f3e8ff;color:#6b21a8;font-size:8px;font-weight:600;padding:2px 7px;border-radius:20px;">Cloud</span>
-            </div>
-          </div>
-        </div>
+  <!-- ══════════ HEADER ══════════ -->
+  <div class="header">
+    <div class="header-left">
+      <h1>SyncSo — System Architecture</h1>
+      <div class="tagline">
+        Full-Stack Social Product &nbsp;·&nbsp;
+        <span style="font-weight:700;color:#1d4ed8;background:#dbeafe;padding:1px 8px;border-radius:4px;letter-spacing:0.2px;">Zhangyi Wang</span>
+        &nbsp;·&nbsp; Mobile + Backend + Admin + Cloud + AI
       </div>
-
-      <!-- ════════ VIDEO LINK ════════ -->
-      <a
-        class="video-card"
-        href="https://drive.google.com/file/d/1qkjEHnDjHaO6iA5ren-EMEqqXrYHlT2g/view?usp=sharing"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <div class="video-play-btn">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </div>
-        <div class="video-info">
-          <div class="video-label">▶ Product</div>
-          <div class="video-title">SyncSo — Full-Stack Social Product</div>
-          <div class="video-desc">
-            Mobile App · Backend · Admin Dashboard · Real-time Messaging · Maps
-            · AI Features
-          </div>
-        </div>
-        <div class="video-badge">
-          <div class="video-badge-dot"></div>
-          <span class="video-badge-text">Watch</span>
-        </div>
-      </a>
-
-      <!-- ════════ ARCHITECTURE STRIP ════════ -->
-      <div>
-        <div class="section-label">System Architecture Overview</div>
-        <div class="arch-strip">
-          <div class="arch-node highlight">
-            <span class="aname">📱 Mobile App</span>
-            <span class="atech">React Native + Expo</span>
-          </div>
-          <div class="arch-arrow">→</div>
-          <div class="arch-node highlight">
-            <span class="aname">⚙️ Backend API</span>
-            <span class="atech">Spring Boot + MongoDB</span>
-          </div>
-          <div class="arch-arrow">↔</div>
-          <div class="arch-node highlight">
-            <span class="aname">💬 Chat Service</span>
-            <span class="atech">WebSocket + IM SDK</span>
-          </div>
-          <div class="arch-arrow">→</div>
-          <div class="arch-node highlight">
-            <span class="aname">🍃 Data Layer</span>
-            <span class="atech">MongoDB + Caffeine</span>
-          </div>
-          <div class="arch-arrow">↔</div>
-          <div class="arch-node highlight">
-            <span class="aname">☁️ Integrations</span>
-            <span class="atech">AWS · Firebase · Google · OpenAI</span>
-          </div>
-          <div class="arch-arrow">←</div>
-          <div class="arch-node highlight">
-            <span class="aname">🖥️ Admin Web</span>
-            <span class="atech">React + Vite + Tailwind</span>
-          </div>
-        </div>
+    </div>
+    <div class="header-right">
+      <div class="stat-row">
+        <div class="stat">Users &nbsp;<span>2,000+</span></div>
+        <div class="stat">Platform &nbsp;<span>iOS · Android · Web</span></div>
+        <div class="stat">Runtime &nbsp;<span>AWS EC2 + Docker</span></div>
       </div>
-
-      <!-- ════════ ROW 1: MOBILE + BACKEND + ADMIN ════════ -->
-      <div class="grid-3">
-        <!-- Mobile -->
-        <div class="card card-mobile">
-          <div class="card-header">
-            <span class="card-icon">📱</span>
-            <span class="card-title"
-              >Mobile App <span class="card-sub">joyn-mobile</span></span
-            >
-          </div>
-          <div class="tags" style="margin-bottom: 6px">
-            <span class="tag tag-blue">React Native 0.73</span>
-            <span class="tag tag-blue">Expo 50</span>
-            <span class="tag tag-blue">React 18</span>
-            <span class="tag tag-blue">Redux Toolkit</span>
-            <span class="tag tag-blue">React Navigation</span>
-            <span class="tag tag-blue">TypeScript (partial)</span>
-            <span class="tag tag-blue">Yarn · Metro · Babel</span>
-            <span class="tag tag-blue">AsyncStorage</span>
-            <span class="tag tag-blue">Axios custom wrapper</span>
-            <span class="tag tag-blue">Lottie · SVG Transformer</span>
-          </div>
-          <div class="feat-list">
-            <div class="feat-item">Onboarding · Profile · Prompts · Photos</div>
-            <div class="feat-item">Social discovery · Swipe · Story view</div>
-            <div class="feat-item">
-              Event / Plan creation (4000+ line feature)
-            </div>
-            <div class="feat-item">Messaging · Group chat · Notifications</div>
-            <div class="feat-item">Maps · Location · Geo clustering</div>
-            <div class="feat-item">Calendar sync · Contact invite</div>
-            <div class="feat-item">AI-assisted content generation</div>
-            <div class="feat-item">QR sharing · Deep links</div>
-          </div>
-        </div>
-
-        <!-- Backend -->
-        <div class="card card-backend">
-          <div class="card-header">
-            <span class="card-icon">⚙️</span>
-            <span class="card-title"
-              >Backend Services
-              <span class="card-sub">injoyn-backend</span></span
-            >
-          </div>
-          <div class="tags" style="margin-bottom: 6px">
-            <span class="tag tag-red">Java 11</span>
-            <span class="tag tag-red">Spring Boot 2.4</span>
-            <span class="tag tag-red">Spring Security</span>
-            <span class="tag tag-red">JWT + OAuth2</span>
-            <span class="tag tag-red">Spring WebSocket</span>
-            <span class="tag tag-red">Spring Data MongoDB</span>
-            <span class="tag tag-red">MongoTemplate</span>
-            <span class="tag tag-red">Maven Multi-module</span>
-            <span class="tag tag-red">Lombok</span>
-            <span class="tag tag-red">Swagger / Springfox</span>
-            <span class="tag tag-red">Actuator · Micrometer</span>
-            <span class="tag tag-red">Prometheus</span>
-            <span class="tag tag-red">Caffeine Cache</span>
-            <span class="tag tag-red">Scheduled + Async</span>
-          </div>
-          <div class="feat-list">
-            <div class="feat-item">
-              Modules: api · dal · commons · chat-service · canary ·
-              integration-test
-            </div>
-            <div class="feat-item">
-              Auth: JWT filter · BCrypt · OAuth2 · @PreAuthorize
-            </div>
-            <div class="feat-item">
-              MongoDB: @Document · geo near · aggregation pipelines
-            </div>
-            <div class="feat-item">Notification: FCM push · SMS · email</div>
-            <div class="feat-item">
-              AI: ChatGPT · Embedding · Bio generation
-            </div>
-            <div class="feat-item">
-              Custom metrics · Prometheus counters · Actuator
-            </div>
-          </div>
-        </div>
-
-        <!-- Admin Web -->
-        <div class="card card-web">
-          <div class="card-header">
-            <span class="card-icon">🖥️</span>
-            <span class="card-title"
-              >Admin Dashboard
-              <span class="card-sub">injoyn-mgr-web</span></span
-            >
-          </div>
-          <div class="tags" style="margin-bottom: 6px">
-            <span class="tag tag-green">React 19</span>
-            <span class="tag tag-green">Vite 6</span>
-            <span class="tag tag-green">Tailwind CSS 4</span>
-            <span class="tag tag-green">React Router 7</span>
-            <span class="tag tag-green">Axios</span>
-            <span class="tag tag-green">Leaflet + React-Leaflet</span>
-            <span class="tag tag-green">react-error-boundary</span>
-            <span class="tag tag-green">react-icons</span>
-            <span class="tag tag-green">ESLint 9</span>
-          </div>
-          <div class="feat-list">
-            <div class="feat-item">Account Manager · User ban / moderation</div>
-            <div class="feat-item">Event Manager · Content moderation</div>
-            <div class="feat-item">Report Manager · User + Event reports</div>
-            <div class="feat-item">Invite User · Phone-based invite flow</div>
-            <div class="feat-item">
-              Broadcast Message · SMS audience builder
-            </div>
-            <div class="feat-item">
-              Interactive map cards (Leaflet + OSM tiles)
-            </div>
-            <div class="feat-item">
-              Custom pagination hook · localStorage cache
-            </div>
-            <div class="feat-item">
-              JWT-gated ProtectedRoute · App version control
-            </div>
-          </div>
-        </div>
+      <div class="stat-row">
+        <div class="stat">Backend &nbsp;<span>Java 11 · Spring Boot 2.4</span></div>
+        <div class="stat">DB &nbsp;<span>MongoDB</span></div>
+        <div class="stat">CI/CD &nbsp;<span>GitHub Actions → ECR</span></div>
       </div>
+    </div>
+  </div>
 
-      <!-- ════════ ROW 2: DATA + INTEGRATIONS + AI ════════ -->
-      <div class="grid-3">
-        <!-- Data Layer -->
-        <div class="card card-data">
-          <div class="card-header">
-            <span class="card-icon">🗄️</span>
-            <span class="card-title">Data &amp; State Layer</span>
-          </div>
-          <div class="tags" style="margin-bottom: 5px">
-            <span class="tag tag-purple">MongoDB (primary DB)</span>
-            <span class="tag tag-purple">Spring Data MongoDB</span>
-            <span class="tag tag-purple">MongoRepository</span>
-            <span class="tag tag-purple">MongoTemplate</span>
-            <span class="tag tag-purple">Geo near queries</span>
-            <span class="tag tag-purple">Aggregation pipelines</span>
-            <span class="tag tag-purple">Caffeine (in-memory)</span>
-            <span class="tag tag-purple">Redux Toolkit slices</span>
-            <span class="tag tag-purple">AsyncStorage (mobile)</span>
-          </div>
-          <div class="feat-list">
-            <div class="feat-item">
-              Documents: Users · Events · Messages · Relations
-            </div>
-            <div class="feat-item">
-              Custom repository impls for complex queries
-            </div>
-            <div class="feat-item">
-              Geospatial indexing for location-based features
-            </div>
-            <div class="feat-item">
-              Client-side state: auth · event · home · me · friend · message
-            </div>
-          </div>
-        </div>
+  <!-- ══════════ VIDEO LINK ══════════ -->
+  <a class="video-card"
+     href="https://drive.google.com/file/d/1qkjEHnDjHaO6iA5ren-EMEqqXrYHlT2g/view?usp=sharing"
+     target="_blank" rel="noopener noreferrer">
+    <div class="vplay">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+    <div class="vinfo">
+      <div class="vlabel">▶ Live Product Walkthrough</div>
+      <div class="vtitle">SyncSo — Production App &nbsp;·&nbsp; 2,000+ Active Users</div>
+      <div class="vsub">Mobile App · Spring Boot Backend · Admin Dashboard · Realtime Chat · Maps · AI Features</div>
+    </div>
+    <div class="vbadge">
+      <div class="vdot"></div>
+      <span class="vbadge-text">Watch Now</span>
+    </div>
+  </a>
 
-        <!-- External Integrations -->
-        <div class="card card-ext">
-          <div class="card-header">
-            <span class="card-icon">🔌</span>
-            <span class="card-title">Platform Integrations</span>
-          </div>
-          <div class="tags" style="margin-bottom: 5px">
-            <span class="tag tag-orange">AWS S3</span>
-            <span class="tag tag-orange">AWS SNS</span>
-            <span class="tag tag-orange">AWS Pinpoint</span>
-            <span class="tag tag-orange">AWS ECR</span>
-            <span class="tag tag-orange">Firebase FCM</span>
-            <span class="tag tag-orange">Firebase Admin SDK</span>
-            <span class="tag tag-orange">Google OAuth2</span>
-            <span class="tag tag-orange">Google Calendar API</span>
-            <span class="tag tag-orange">Google Maps (related)</span>
-            <span class="tag tag-orange">Easemob / HyperIM</span>
-            <span class="tag tag-orange">JavaMailSender</span>
-            <span class="tag tag-orange">ZXing (QR)</span>
-            <span class="tag tag-orange">Apache POI (Excel)</span>
-            <span class="tag tag-orange">Jsoup (HTML parse)</span>
-            <span class="tag tag-orange">Mixpanel (analytics)</span>
-          </div>
-          <div class="feat-list">
-            <div class="feat-item">
-              S3: media file upload · avatars · event images
-            </div>
-            <div class="feat-item">
-              SNS + Pinpoint: SMS OTP · waitlist nudges
-            </div>
-            <div class="feat-item">Firebase: cross-platform push delivery</div>
-            <div class="feat-item">Google: SSO login · calendar read/write</div>
-          </div>
-        </div>
+  <div style="height:10px;"></div>
 
-        <!-- AI Layer -->
-        <div class="card card-ai">
-          <div class="card-header">
-            <span class="card-icon">🤖</span>
-            <span class="card-title">AI &amp; Intelligence Layer</span>
-          </div>
-          <div class="tags" style="margin-bottom: 5px">
-            <span class="tag tag-yellow">OpenAI SDK (mobile)</span>
-            <span class="tag tag-yellow">OpenAI API (backend)</span>
-            <span class="tag tag-yellow">ChatGPT completions</span>
-            <span class="tag tag-yellow">Text embeddings</span>
-            <span class="tag tag-yellow">useAI hook (RN)</span>
-            <span class="tag tag-yellow">aiService.js</span>
-            <span class="tag tag-yellow">EmbeddingService (Java)</span>
-            <span class="tag tag-yellow">BioService (Java)</span>
-            <span class="tag tag-yellow">EventEmojiService</span>
-          </div>
-          <div class="feat-list">
-            <div class="feat-item">
-              AI bio writing assistant (backend + mobile)
-            </div>
-            <div class="feat-item">
-              Event title / emoji / description generation
-            </div>
-            <div class="feat-item">
-              User + event embedding for recommendation
-            </div>
-            <div class="feat-item">
-              First-post AI flow for new users (mobile)
-            </div>
-          </div>
+  <!-- ══════════ LAYER 1: CLIENT ══════════ -->
+  <div class="layer lc-client">
+    <div class="layer-tag">Client Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">📱</div>
+          <div class="nd-name">iOS Application</div>
+          <div class="nd-sub">React Native 0.73 · Expo 50<br/>Hermes JS engine · CocoaPods</div>
+          <div class="nd-badge b-blue">Swift native layer</div>
         </div>
-      </div>
-
-      <!-- ════════ ROW 3: INFRA + CI/CD + KEY SKILLS ════════ -->
-      <div class="grid-2">
-        <!-- Infra & CI/CD -->
-        <div class="card card-infra">
-          <div class="card-header">
-            <span class="card-icon">🚀</span>
-            <span class="card-title">Delivery &amp; Infrastructure</span>
-          </div>
-          <div style="margin-bottom: 6px">
-            <div class="section-label" style="margin-bottom: 3px">
-              CI / CD Pipeline
-            </div>
-            <div class="pipeline">
-              <div class="pipe-step">Push → main</div>
-              <div class="pipe-arrow">→</div>
-              <div class="pipe-step">GitHub Actions</div>
-              <div class="pipe-arrow">→</div>
-              <div class="pipe-step">Maven Build</div>
-              <div class="pipe-arrow">→</div>
-              <div class="pipe-step">Docker Build (amd64)</div>
-              <div class="pipe-arrow">→</div>
-              <div class="pipe-step">AWS ECR Push</div>
-              <div class="pipe-arrow">→</div>
-              <div class="pipe-step">EC2 Deploy</div>
-            </div>
-          </div>
-          <div class="tags" style="margin-bottom: 5px">
-            <span class="tag tag-sky">Docker (api + chat-service)</span>
-            <span class="tag tag-sky">Docker Compose (admin web)</span>
-            <span class="tag tag-sky">GitHub Actions Workflows</span>
-            <span class="tag tag-sky">AWS ECR (us-west-2)</span>
-            <span class="tag tag-sky">Nginx (SSL · reverse proxy)</span>
-            <span class="tag tag-sky">Express + Node (static host)</span>
-            <span class="tag tag-sky">Let's Encrypt SSL</span>
-            <span class="tag tag-sky">certbot auto-renewal</span>
-            <span class="tag tag-sky">Bash ops scripts</span>
-            <span class="tag tag-sky">logrotate · cron</span>
-          </div>
-          <div class="feat-list">
-            <div class="feat-item">
-              Backend: Dockerfile → ECR image → EC2 runtime, port 8080
-            </div>
-            <div class="feat-item">
-              Admin: Vite build → Express hosting + Nginx proxy, port 3133
-            </div>
-            <div class="feat-item">
-              Mobile: Expo EAS build + OTA updates (expo-updates)
-            </div>
-            <div class="feat-item">
-              Ops: SSL renewal cron · Docker graceful restart · health checks
-            </div>
-          </div>
+        <div class="nd">
+          <div class="nd-icon">🤖</div>
+          <div class="nd-name">Android Application</div>
+          <div class="nd-sub">React Native 0.73 · Expo 50<br/>Hermes JS engine · Gradle</div>
+          <div class="nd-badge b-green">Google Services</div>
         </div>
-
-        <!-- Skills summary -->
-        <div class="card card-skills">
-          <div class="card-header">
-            <span class="card-icon" style="color: #60a5fa">⭐</span>
-            <span class="card-title">Engineering Strengths</span>
-          </div>
-          <div class="tags" style="margin-bottom: 8px">
-            <span class="tag">Full-stack product engineering</span>
-            <span class="tag">React Native mobile architecture</span>
-            <span class="tag">Spring Boot backend design</span>
-            <span class="tag">MongoDB data modeling</span>
-            <span class="tag">Real-time messaging systems</span>
-            <span class="tag">Third-party platform integration</span>
-            <span class="tag">Cloud delivery (Docker · AWS)</span>
-            <span class="tag">AI feature productionization</span>
-            <span class="tag">Admin &amp; ops tooling</span>
-            <span class="tag">Authentication &amp; security</span>
-            <span class="tag">Geospatial features</span>
-            <span class="tag">Push &amp; notification infrastructure</span>
-            <span class="tag">Cross-platform ownership</span>
-            <span class="tag">Observability &amp; monitoring</span>
-          </div>
-          <div
-            style="
-              background: #162960;
-              border-radius: 6px;
-              padding: 7px 9px;
-              margin-top: 2px;
-            "
-          >
-            <div
-              style="
-                font-size: 9px;
-                color: #93c5fd;
-                font-weight: 700;
-                margin-bottom: 4px;
-                letter-spacing: 0.5px;
-              "
-            >
-              WHAT THIS PROJECT DEMONSTRATES
-            </div>
-            <div style="font-size: 8.5px; color: #cbd5e1; line-height: 1.6">
-              End-to-end ownership across a real social product: from mobile UX
-              and backend architecture to production delivery and operations.
-              Capable of connecting product complexity, system design, platform
-              integrations, and engineering execution across the full stack —
-              reflecting the scope and judgment expected at a
-              <strong style="color: #93c5fd"
-                >senior / staff engineering level</strong
-              >.
-            </div>
-          </div>
+        <div class="nd">
+          <div class="nd-icon">🖥️</div>
+          <div class="nd-name">Admin Dashboard</div>
+          <div class="nd-sub">React 19 · Vite 6<br/>Tailwind CSS 4 · React Router 7</div>
+          <div class="nd-badge b-purple">Internal Ops</div>
         </div>
-      </div>
-
-      <!-- ════════ PRODUCT FEATURES STRIP ════════ -->
-      <div>
-        <div class="section-label">Product Features Covered</div>
-        <div class="grid-4">
-          <div
-            style="
-              background: #f8fafc;
-              border: 1px solid #e2e8f0;
-              border-radius: 6px;
-              padding: 6px 8px;
-            "
-          >
-            <div
-              style="
-                font-size: 8.5px;
-                font-weight: 700;
-                color: #1e40af;
-                margin-bottom: 3px;
-              "
-            >
-              👤 User &amp; Social
-            </div>
-            <div class="tags">
-              <span class="tag">Onboarding</span
-              ><span class="tag">Profile</span> <span class="tag">Prompts</span
-              ><span class="tag">Social graph</span>
-              <span class="tag">Follow / Friend</span
-              ><span class="tag">Invite flow</span>
-            </div>
-          </div>
-          <div
-            style="
-              background: #f8fafc;
-              border: 1px solid #e2e8f0;
-              border-radius: 6px;
-              padding: 6px 8px;
-            "
-          >
-            <div
-              style="
-                font-size: 8.5px;
-                font-weight: 700;
-                color: #15803d;
-                margin-bottom: 3px;
-              "
-            >
-              📅 Events &amp; Discovery
-            </div>
-            <div class="tags">
-              <span class="tag">Event creation</span
-              ><span class="tag">Discovery feed</span>
-              <span class="tag">Maps</span
-              ><span class="tag">Calendar sync</span>
-              <span class="tag">Tag-based</span
-              ><span class="tag">Story view</span>
-            </div>
-          </div>
-          <div
-            style="
-              background: #f8fafc;
-              border: 1px solid #e2e8f0;
-              border-radius: 6px;
-              padding: 6px 8px;
-            "
-          >
-            <div
-              style="
-                font-size: 8.5px;
-                font-weight: 700;
-                color: #be123c;
-                margin-bottom: 3px;
-              "
-            >
-              💬 Messaging &amp; Notif
-            </div>
-            <div class="tags">
-              <span class="tag">1:1 chat</span
-              ><span class="tag">Group chat</span>
-              <span class="tag">Push (FCM)</span><span class="tag">SMS</span>
-              <span class="tag">Email</span
-              ><span class="tag">In-app notifications</span>
-            </div>
-          </div>
-          <div
-            style="
-              background: #f8fafc;
-              border: 1px solid #e2e8f0;
-              border-radius: 6px;
-              padding: 6px 8px;
-            "
-          >
-            <div
-              style="
-                font-size: 8.5px;
-                font-weight: 700;
-                color: #7e22ce;
-                margin-bottom: 3px;
-              "
-            >
-              🛠️ Ops &amp; Growth
-            </div>
-            <div class="tags">
-              <span class="tag">User moderation</span
-              ><span class="tag">Reports</span>
-              <span class="tag">Broadcast SMS</span
-              ><span class="tag">AI content</span>
-              <span class="tag">Analytics</span
-              ><span class="tag">App versions</span>
-            </div>
-          </div>
+        <div class="nd" style="max-width:200px;">
+          <div class="nd-icon">📦</div>
+          <div class="nd-name">Mobile State Management</div>
+          <div class="nd-sub">Redux Toolkit · redux-thunk<br/>AsyncStorage · React Navigation</div>
+          <div class="nd-badge b-sky">Redux slices: auth · event · home · me · message · friend</div>
         </div>
-      </div>
-
-      <!-- ════════ FOOTER ════════ -->
-      <div class="footer">
-        <div class="footer-left">
-          Zhangyi Wang · SyncSo · injoyn-backend + joyn-mobile + injoyn-mgr-web
-          · Multi-platform Social Product
-        </div>
-        <div class="footer-right">
-          Java · Spring Boot · React Native · Expo · React · MongoDB · AWS · Firebase · OpenAI
+        <div class="nd" style="max-width:160px;">
+          <div class="nd-icon">🚀</div>
+          <div class="nd-name">OTA Updates</div>
+          <div class="nd-sub">Expo EAS Build · expo-updates<br/>EAS Submit · eas.json profiles</div>
+          <div class="nd-badge b-orange">Live updates</div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">HTTPS / REST · WebSocket</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 2: PROXY ══════════ -->
+  <div class="layer lc-proxy">
+    <div class="layer-tag">Reverse Proxy &amp; Hosting Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🌐</div>
+          <div class="nd-name">Nginx</div>
+          <div class="nd-sub">SSL termination · Port 443<br/>Reverse proxy to :8080</div>
+          <div class="nd-badge b-green">Let's Encrypt TLS</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🟩</div>
+          <div class="nd-name">Express + Node</div>
+          <div class="nd-sub">Static file hosting · Port 3133<br/>serve-3133.js · SPA fallback</div>
+          <div class="nd-badge b-green">Admin Web hosting</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🔀</div>
+          <div class="nd-name">API Proxy</div>
+          <div class="nd-sub">http-proxy-middleware<br/>/api → backend passthrough</div>
+          <div class="nd-badge b-sky">changeOrigin · HTTPS</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🛠️</div>
+          <div class="nd-name">Ops Automation</div>
+          <div class="nd-sub">certbot auto-renewal<br/>Docker graceful restart · cron</div>
+          <div class="nd-badge b-gray">Shell scripts · logrotate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Filtered request pipeline</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 3: AUTH ══════════ -->
+  <div class="layer lc-auth">
+    <div class="layer-tag">Security &amp; Authentication Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🔐</div>
+          <div class="nd-name">Spring Security</div>
+          <div class="nd-sub">Filter chain · SecurityConfig<br/>Stateless session policy</div>
+          <div class="nd-badge b-orange">OncePerRequestFilter</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🪙</div>
+          <div class="nd-name">JWT</div>
+          <div class="nd-sub">TokenProvider · TokenAuthFilter<br/>JJWT 0.9 · Bearer tokens</div>
+          <div class="nd-badge b-orange">Stateless auth</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🔑</div>
+          <div class="nd-name">OAuth2 Client</div>
+          <div class="nd-sub">Google SSO · Facebook SSO<br/>spring-security-oauth2-client</div>
+          <div class="nd-badge b-orange">Third-party login</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🛡️</div>
+          <div class="nd-name">Method Security</div>
+          <div class="nd-sub">@PreAuthorize · RBAC<br/>BCryptPasswordEncoder</div>
+          <div class="nd-badge b-red">Role-based access</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📋</div>
+          <div class="nd-name">Bean Validation</div>
+          <div class="nd-sub">javax.validation API<br/>@Valid · @NotBlank · @NotNull</div>
+          <div class="nd-badge b-orange">Request validation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Authenticated request</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 4: SERVICES (+ sides) ══════════ -->
+  <div class="layer lc-service">
+    <div class="layer-tag">Core Business Service Layer (Spring Boot 2.4 · Maven Multi-module)</div>
+    <div class="layer-inner">
+      <div class="service-row">
+
+        <!-- LEFT SIDE -->
+        <div class="service-side">
+          <div class="side-grp">
+            <div class="side-grp-title">Notification Services</div>
+            <div class="snd"><div class="s-icon">🔥</div><div class="s-text"><div class="s-name">Firebase FCM</div><div class="s-sub">Push · Topic / token</div></div></div>
+            <div class="snd"><div class="s-icon">☁️</div><div class="s-text"><div class="s-name">AWS SNS</div><div class="s-sub">SMS · Alerts</div></div></div>
+            <div class="snd"><div class="s-icon">📍</div><div class="s-text"><div class="s-name">AWS Pinpoint</div><div class="s-sub">SMS OTP · Marketing</div></div></div>
+            <div class="snd"><div class="s-icon">📧</div><div class="s-text"><div class="s-name">JavaMailSender</div><div class="s-sub">Email verification</div></div></div>
+            <div class="snd"><div class="s-icon">📲</div><div class="s-text"><div class="s-name">Notifee (mobile)</div><div class="s-sub">Local notifications</div></div></div>
+          </div>
+          <div class="side-grp">
+            <div class="side-grp-title">AI / Intelligence</div>
+            <div class="snd"><div class="s-icon">🧠</div><div class="s-text"><div class="s-name">OpenAI GPT</div><div class="s-sub">Completions API</div></div></div>
+            <div class="snd"><div class="s-icon">📐</div><div class="s-text"><div class="s-name">Embedding Service</div><div class="s-sub">User + event vectors</div></div></div>
+            <div class="snd"><div class="s-icon">✍️</div><div class="s-text"><div class="s-name">Bio / Emoji Gen</div><div class="s-sub">AI content generation</div></div></div>
+          </div>
+        </div>
+
+        <!-- CENTER SERVICES -->
+        <div class="service-center">
+          <!-- Row A: Primary services -->
+          <div class="row">
+            <div class="nd">
+              <div class="nd-icon">👤</div>
+              <div class="nd-name">User Service</div>
+              <div class="nd-sub">Profile · Social graph<br/>Follow · Prompts · Photos</div>
+              <div class="nd-badge b-purple">MongoDB CRUD</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">📅</div>
+              <div class="nd-name">Event Service</div>
+              <div class="nd-sub">Create · RSVP · Invite<br/>Location · Calendar</div>
+              <div class="nd-badge b-purple">Geo indexed</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🔍</div>
+              <div class="nd-name">Discovery Service</div>
+              <div class="nd-sub">ForYou feed · Swipe<br/>Embedding-based ranking</div>
+              <div class="nd-badge b-teal">AI-enhanced</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🚨</div>
+              <div class="nd-name">Report Service</div>
+              <div class="nd-sub">User · Event reports<br/>Admin moderation</div>
+              <div class="nd-badge b-red">Moderation</div>
+            </div>
+          </div>
+          <div class="svc-divider"></div>
+          <!-- Row B: Secondary services -->
+          <div class="row">
+            <div class="nd">
+              <div class="nd-icon">💬</div>
+              <div class="nd-name">Chat Service</div>
+              <div class="nd-sub">Spring WebSocket · STOMP<br/>1:1 · group messaging</div>
+              <div class="nd-badge b-sky">Realtime · SockJS</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">📢</div>
+              <div class="nd-name">Broadcast Service</div>
+              <div class="nd-sub">SMS campaigns<br/>Audience builder · Templates</div>
+              <div class="nd-badge b-purple">Ops tooling</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">📊</div>
+              <div class="nd-name">Metrics &amp; Observability</div>
+              <div class="nd-sub">Spring Actuator · Micrometer<br/>Prometheus registry</div>
+              <div class="nd-badge b-gray">Custom counters</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🕐</div>
+              <div class="nd-name">Async &amp; Scheduler</div>
+              <div class="nd-sub">@Scheduled jobs<br/>@Async thread pool · AsyncConfig</div>
+              <div class="nd-badge b-yellow">Background tasks</div>
+            </div>
+          </div>
+          <div class="svc-divider"></div>
+          <!-- Row C: Shared modules -->
+          <div class="row">
+            <div class="nd">
+              <div class="nd-icon">📦</div>
+              <div class="nd-name">commons module</div>
+              <div class="nd-sub">Shared DTOs · contracts<br/>Exceptions · utils</div>
+              <div class="nd-badge b-gray">Shared library</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🗄️</div>
+              <div class="nd-name">dal module</div>
+              <div class="nd-sub">MongoRepository<br/>MongoTemplate impls</div>
+              <div class="nd-badge b-yellow">Data access layer</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🐦</div>
+              <div class="nd-name">canary module</div>
+              <div class="nd-sub">Health probe<br/>Deployment validation</div>
+              <div class="nd-badge b-green">Canary checks</div>
+            </div>
+            <div class="nd">
+              <div class="nd-icon">🧪</div>
+              <div class="nd-name">integration-test module</div>
+              <div class="nd-sub">TestNG · Java HttpClient<br/>Endpoint smoke tests</div>
+              <div class="nd-badge b-gray">E2E validation</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="service-side">
+          <div class="side-grp">
+            <div class="side-grp-title">Cloud Storage &amp; Infra</div>
+            <div class="snd"><div class="s-icon">🗂️</div><div class="s-text"><div class="s-name">AWS S3</div><div class="s-sub">Media · images · files</div></div></div>
+            <div class="snd"><div class="s-icon">📦</div><div class="s-text"><div class="s-name">AWS ECR</div><div class="s-sub">Docker image registry</div></div></div>
+          </div>
+          <div class="side-grp">
+            <div class="side-grp-title">External Platforms</div>
+            <div class="snd"><div class="s-icon">📅</div><div class="s-text"><div class="s-name">Google Calendar</div><div class="s-sub">Read / write events</div></div></div>
+            <div class="snd"><div class="s-icon">🗺️</div><div class="s-text"><div class="s-name">Google Maps</div><div class="s-sub">Place · geocoding</div></div></div>
+            <div class="snd"><div class="s-icon">🔑</div><div class="s-text"><div class="s-name">Google OAuth</div><div class="s-sub">SSO · auth tokens</div></div></div>
+            <div class="snd"><div class="s-icon">💬</div><div class="s-text"><div class="s-name">Easemob IM SDK</div><div class="s-sub">Chat · groups · contacts</div></div></div>
+            <div class="snd"><div class="s-icon">📄</div><div class="s-text"><div class="s-name">Jsoup · Apache POI</div><div class="s-sub">HTML parse · Excel export</div></div></div>
+            <div class="snd"><div class="s-icon">📐</div><div class="s-text"><div class="s-name">ZXing</div><div class="s-sub">QR code generation</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">MongoDB driver · Spring Data</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 5: DATA ══════════ -->
+  <div class="layer lc-data">
+    <div class="layer-tag">Data Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🍃</div>
+          <div class="nd-name">MongoDB</div>
+          <div class="nd-sub">Primary document database<br/>@Document entities · indexes</div>
+          <div class="nd-badge b-yellow">Users · Events · Messages · Relationships</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📁</div>
+          <div class="nd-name">Spring Data MongoDB</div>
+          <div class="nd-sub">MongoRepository interfaces<br/>MongoTemplate custom impls</div>
+          <div class="nd-badge b-yellow">Criteria / Query builders</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🌍</div>
+          <div class="nd-name">Geospatial Queries</div>
+          <div class="nd-sub">Geo near · 2dsphere index<br/>Location-based discovery</div>
+          <div class="nd-badge b-teal">Aggregation pipelines</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">⚡</div>
+          <div class="nd-name">Caffeine Cache</div>
+          <div class="nd-sub">In-memory L1 cache<br/>Place photos · TTL eviction</div>
+          <div class="nd-badge b-yellow">github.com/ben-manes/caffeine</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">💾</div>
+          <div class="nd-name">Client-side Persistence</div>
+          <div class="nd-sub">AsyncStorage · Redux state<br/>Tokens · flags · drafts</div>
+          <div class="nd-badge b-sky">Mobile state persistence</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Build · package · deploy</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- ══════════ LAYER 6: CI/CD ══════════ -->
+  <div class="layer lc-cicd">
+    <div class="layer-tag">CI / CD &amp; Delivery Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">⚙️</div>
+          <div class="nd-name">GitHub Actions</div>
+          <div class="nd-sub">build.yml · ecr.yml<br/>Maven build → Docker → ECR</div>
+          <div class="nd-badge b-sky">Push to main triggers</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🐳</div>
+          <div class="nd-name">Docker</div>
+          <div class="nd-sub">api/Dockerfile · chat Dockerfile<br/>OpenJDK 11 · linux/amd64</div>
+          <div class="nd-badge b-sky">Multi-service containers</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📦</div>
+          <div class="nd-name">AWS ECR</div>
+          <div class="nd-sub">Image registry · us-west-2<br/>COMMIT_SHA tagging strategy</div>
+          <div class="nd-badge b-sky">637423...amazonaws.com</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🖥️</div>
+          <div class="nd-name">EC2 Runtime</div>
+          <div class="nd-sub">Docker pull + run · release.sh<br/>Port 8080 · SSH deploy</div>
+          <div class="nd-badge b-green">Production server</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📱</div>
+          <div class="nd-name">Expo EAS</div>
+          <div class="nd-sub">iOS · Android builds<br/>OTA via expo-updates</div>
+          <div class="nd-badge b-blue">eas.json profiles</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🐙</div>
+          <div class="nd-name">Docker Compose</div>
+          <div class="nd-sub">docker-compose-3133.yml<br/>Admin web container</div>
+          <div class="nd-badge b-sky">syncso-mgr-web:3133</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ LEGEND ══════════ -->
+  <div class="legend">
+    <div class="li"><div class="li-dot" style="background:#bfdbfe;border:1px solid #93c5fd;"></div>Client Layer</div>
+    <div class="li"><div class="li-dot" style="background:#bbf7d0;border:1px solid #86efac;"></div>Proxy / Hosting</div>
+    <div class="li"><div class="li-dot" style="background:#fecdd3;border:1px solid #fda4af;"></div>Auth / Security</div>
+    <div class="li"><div class="li-dot" style="background:#e9d5ff;border:1px solid #d8b4fe;"></div>Business Services</div>
+    <div class="li"><div class="li-dot" style="background:#fde68a;border:1px solid #fcd34d;"></div>Data Layer</div>
+    <div class="li"><div class="li-dot" style="background:#bae6fd;border:1px solid #7dd3fc;"></div>CI/CD &amp; Delivery</div>
+    <div class="li"><div class="li-dot" style="background:#f1f5f9;border:1px dashed #cbd5e1;"></div>External Integration</div>
+  </div>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <div class="footer">
+    <div class="footer-left"><span style="font-weight:700;color:#2563eb;">Zhangyi Wang</span> · SyncSo Platform · 2,000+ Users · Live Production</div>
+    <div class="footer-right">
+      <div class="ft">Java 11</div><div class="ft">Spring Boot 2.4</div>
+      <div class="ft">MongoDB</div><div class="ft">React Native 0.73</div>
+      <div class="ft">Expo 50</div><div class="ft">React 19</div>
+      <div class="ft">Docker</div><div class="ft">AWS</div>
+      <div class="ft">Firebase</div><div class="ft">OpenAI</div>
+    </div>
+  </div>
+
+</div>
+</body>
 </html>
