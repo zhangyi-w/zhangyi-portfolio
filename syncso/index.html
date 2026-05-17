@@ -772,36 +772,6 @@ h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
 
   </div>
 </section>
-<section>
-  <h2 class="section-header">How I built it — operator signals</h2>
-  <div class="cards-2">
-
-    <div class="card">
-      <div class="card-title">Same constitution</div>
-      <div class="card-body">
-        Claude Code + MCP + a <code>CLAUDE.md</code> constitution is how I work. <code>joyn-mobile/CLAUDE.md</code> documents the design-system rules, naming conventions, debug overlays, and component patterns — the AI follows that, not improvises.
-      </div>
-      <div class="code-excerpt">## Coding standards
-
-### Use design system
-@design-system/foundation
-  - Foundation level tokens (raw values)
-@design-system/semantic
-  - Contextual tokens (intent-based)
-@design-system/component
-  - UI presentation only, no business logic</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">No silent failures</div>
-      <div class="card-body">
-        syncso.com runs on EC2 behind Nginx. A systemd timer pings 4 endpoints every 5 minutes. If a check fails, SES emails me. Auto-restart fires with 30-min alert cooldown and 2-hour restart cooldown. TLS auto-renews via Let's Encrypt. Health checks are dry-run testable.
-      </div>
-      <div class="clever"><strong>Operational discipline:</strong> production reliability is a design concern, not an afterthought.</div>
-    </div>
-
-  </div>
-</section>
 <footer class="footer">
   <a href="../index.html">← Back to portfolio home</a>
   <span class="footer-sep">·</span>
