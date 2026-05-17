@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyncSo · System &amp; Builder Brief</title>
+<style>
+:root {
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --text: #1f2024;
+  --text-muted: #5a6573;
+  --accent: #1e3a8a;
+  --accent-soft: #e8edf7;
+  --accent-underline: rgba(30,58,138,0.3);
+  --border: #e3dfd4;
+  --border-strong: #c9c3b3;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.07);
+  --layer-mobile: #eef4ff;
+  --layer-mobile-border: #bfd4ff;
+  --layer-backend: #ecf7ee;
+  --layer-backend-border: #b7dcc1;
+  --layer-data: #fff3e6;
+  --layer-data-border: #f0c98c;
+  --layer-external: #f3ecfa;
+  --layer-external-border: #d4bce8;
+  --layer-infra: #eeeeee;
+  --layer-infra-border: #cccccc;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 28px 56px;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-underline);
+  text-underline-offset: 2px;
+}
+a:hover { text-decoration-color: var(--accent); }
+
+h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: 36px;
+}
+.hero h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+.hero .subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  letter-spacing: 0.01em;
+}
+.hero .ctas {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.hero .cta {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.hero .cta:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hero .cta.primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.hero .cta.primary:hover { background: #16306f; color: white; }
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 44px;
+}
+.tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.tile .value {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.tile .label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.tile.role .value { font-size: 22px; }
+
+.section-header {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cards-3 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 44px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.card .card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.card .card-body {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.card .card-body code {
+  font-family: "SF Mono", Monaco, Consolas, monospace;
+  font-size: 11.5px;
+  background: var(--accent-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--accent);
+}
+.card .clever {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-strong);
+  font-size: 12.5px;
+  color: var(--accent);
+  line-height: 1.5;
+}
+.card .clever strong { color: var(--accent); }
+
+/* ─── Architecture diagram — Layer container ─── */
+.arch {
+  margin-bottom: 44px;
+}
+.arch-header {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.arch .layer {
+  margin-bottom: 6px;
+  position: relative;
+}
+.arch .layer-inner {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.arch .layer-tag {
+  position: absolute;
+  top: -9px;
+  left: 16px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 1px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+/* layer accent colours */
+.arch .lc-client  .layer-inner { border-color:#bfdbfe; background:#eff6ff; }
+.arch .lc-client  .layer-tag   { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
+
+.arch .lc-proxy   .layer-inner { border-color:#bbf7d0; background:#f0fdf4; }
+.arch .lc-proxy   .layer-tag   { background:#f0fdf4; border-color:#bbf7d0; color:#15803d; }
+
+.arch .lc-auth    .layer-inner { border-color:#fecdd3; background:#fff1f2; }
+.arch .lc-auth    .layer-tag   { background:#fff1f2; border-color:#fecdd3; color:#be123c; }
+
+.arch .lc-service .layer-inner { border-color:#e9d5ff; background:#faf5ff; }
+.arch .lc-service .layer-tag   { background:#faf5ff; border-color:#e9d5ff; color:#7e22ce; }
+
+.arch .lc-data    .layer-inner { border-color:#fde68a; background:#fefce8; }
+.arch .lc-data    .layer-tag   { background:#fefce8; border-color:#fde68a; color:#92400e; }
+
+.arch .lc-cicd    .layer-inner { border-color:#bae6fd; background:#f0f9ff; }
+.arch .lc-cicd    .layer-tag   { background:#f0f9ff; border-color:#bae6fd; color:#0369a1; }
+
+/* Node card */
+.arch .row { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
+
+.arch .nd {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  background:#ffffff;
+  border:1.5px solid #e2e8f0;
+  border-radius:8px;
+  padding:9px 11px;
+  min-width:90px;
+  flex:1;
+  transition:border-color .15s, box-shadow .15s;
+  cursor:default;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+.arch .nd:hover {
+  border-color:#94a3b8;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.arch .nd .nd-icon {
+  font-size:18px;
+  line-height:1;
+  margin-bottom:1px;
+}
+.arch .nd .nd-name {
+  font-size:10px;
+  font-weight:600;
+  color:#0f172a;
+  line-height:1.3;
+}
+.arch .nd .nd-sub {
+  font-size:8.5px;
+  color:#64748b;
+  line-height:1.4;
+}
+.arch .nd .nd-badge {
+  display:inline-block;
+  margin-top:3px;
+  font-size:7.5px;
+  font-weight:600;
+  padding:1.5px 6px;
+  border-radius:4px;
+  letter-spacing:0.3px;
+  align-self:flex-start;
+}
+.arch .b-blue   { background:#dbeafe; color:#1e40af; }
+.arch .b-green  { background:#dcfce7; color:#166534; }
+.arch .b-orange { background:#ffedd5; color:#9a3412; }
+.arch .b-purple { background:#f3e8ff; color:#6b21a8; }
+.arch .b-yellow { background:#fef9c3; color:#713f12; }
+.arch .b-sky    { background:#e0f2fe; color:#0c4a6e; }
+.arch .b-red    { background:#ffe4e6; color:#9f1239; }
+.arch .b-teal   { background:#ccfbf1; color:#115e59; }
+.arch .b-gray   { background:#f1f5f9; color:#475569; }
+
+/* Mid-row (services + sides) */
+.arch .service-row {
+  display:flex;
+  gap:8px;
+  align-items:stretch;
+}
+.arch .service-center { flex:1; min-width:0; }
+.arch .service-side {
+  width:148px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.arch .side-grp {
+  background:#f8fafc;
+  border:1.5px dashed #cbd5e1;
+  border-radius:8px;
+  padding:10px 10px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.arch .side-grp-title {
+  font-size:8px;
+  font-weight:700;
+  color:#64748b;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:2px;
+}
+.arch .snd {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:6px;
+  padding:5px 8px;
+  transition:border-color .15s, box-shadow .15s;
+  cursor:default;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+}
+.arch .snd:hover { border-color:#94a3b8; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.arch .snd .s-icon { font-size:14px; flex-shrink:0; }
+.arch .snd .s-text { display:flex; flex-direction:column; }
+.arch .snd .s-name { font-size:8.5px; font-weight:600; color:#0f172a; }
+.arch .snd .s-sub  { font-size:7.5px; color:#94a3b8; }
+
+/* Inline sub-row pill — used for AI / Security callouts inside Services layer */
+.arch .sub-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 7px 12px;
+  margin-top: 8px;
+}
+.arch .sub-row .sub-tag {
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #64748b;
+  flex-shrink: 0;
+}
+.arch .sub-row .sub-items {
+  font-size: 10px;
+  color: #0f172a;
+  line-height: 1.4;
+}
+.arch .sub-row .sub-items b { color: #1e3a8a; font-weight: 700; }
+
+/* Connector */
+.arch .conn {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:20px;
+  gap:8px;
+  font-size:10px;
+}
+.arch .conn-line {
+  flex:1;
+  max-width:40px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, #cbd5e1, transparent);
+}
+.arch .conn-arrow {
+  font-size:12px;
+  color:#94a3b8;
+}
+.arch .conn-text {
+  font-size:8px;
+  font-weight:600;
+  color:#94a3b8;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+}
+
+/* Section divider inside service */
+.arch .svc-divider {
+  height:1px;
+  background:#e2e8f0;
+  margin:8px 0;
+}
+
+/* Legend */
+.arch .legend {
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.arch .li {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:9px;
+  color:#64748b;
+}
+.arch .li-dot {
+  width:8px;
+  height:8px;
+  border-radius:2px;
+  flex-shrink:0;
+}
+
+@media (max-width: 900px) {
+  .arch .service-row { flex-direction: column; }
+  .arch .service-side { width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .hero { flex-direction: column; align-items: stretch; }
+  .hero .ctas { flex-wrap: wrap; }
+}
+
+
+.cards-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 44px;
+}
+.card .code-excerpt {
+  margin-top: 10px;
+  font-family: "SF Mono", Monaco, Consolas, monospace;
+  font-size: 11px;
+  background: #1f2024;
+  color: #c9d1d9;
+  padding: 10px 12px;
+  border-radius: 6px;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+.footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
+}
+.footer a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.footer-sep {
+  color: var(--border-strong);
+  user-select: none;
+}
+
+@media (max-width: 900px) {
+  .cards-3 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .tiles { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .page { padding: 24px 16px 40px; }
+  .cards-2 { grid-template-columns: 1fr; }
+}
+
+@media print {
+  body { background: white; font-size: 11pt; }
+  .page { padding: 0; max-width: none; }
+  section { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+<div style="margin-bottom: 24px;">
+  <a href="../" style="font-size: 13px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+    ← Back to portfolio home
+  </a>
+</div>
+<section class="hero">
+  <div>
+    <h1>SyncSo · Zhangyi Wang</h1>
+    <div class="subtitle">Full-stack social platform · iOS · Android · Web · AI-native</div>
+  </div>
+  <div class="ctas">
+    <a class="cta primary" href="https://drive.google.com/file/d/1qkjEHnDjHaO6iA5ren-EMEqqXrYHlT2g/view?usp=sharing" target="_blank" rel="noopener">▶ Demo</a>
+    <a class="cta" href="#" target="_blank" rel="noopener">Case study</a>
+    <a class="cta" href="https://syncso.com" target="_blank" rel="noopener">Live site →</a>
+  </div>
+</section>
+<section class="tiles">
+  <div class="tile"><div class="value">2.5K+</div><div class="label">Users</div></div>
+  <div class="tile"><div class="value">22.8%</div><div class="label">Engagement lift</div></div>
+  <div class="tile role"><div class="value">CTO</div><div class="label">Role</div></div>
+</section>
+<section class="arch">
+  <h2 class="arch-header">End-to-end ownership · system architecture</h2>
+
+  <!-- Layer 1: Client -->
+  <div class="layer lc-client">
+    <div class="layer-tag">Client Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">📱</div>
+          <div class="nd-name">iOS App</div>
+          <div class="nd-sub">React Native 0.73 · Expo 50<br/>Hermes · CocoaPods</div>
+          <div class="nd-badge b-blue">Swift native layer</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🤖</div>
+          <div class="nd-name">Android App</div>
+          <div class="nd-sub">React Native 0.73 · Expo 50<br/>Hermes · Gradle</div>
+          <div class="nd-badge b-green">Google Services</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🖥️</div>
+          <div class="nd-name">Admin Dashboard</div>
+          <div class="nd-sub">React 19 · Vite 6<br/>Tailwind 4 · React Router 7</div>
+          <div class="nd-badge b-purple">Internal Ops</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">HTTPS / REST · WebSocket</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- Layer 2: Proxy & Hosting -->
+  <div class="layer lc-proxy">
+    <div class="layer-tag">Reverse Proxy &amp; Hosting</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🌐</div>
+          <div class="nd-name">Nginx + TLS</div>
+          <div class="nd-sub">SSL termination · Port 443<br/>Reverse proxy to :8080</div>
+          <div class="nd-badge b-green">Let's Encrypt auto-renew</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🔀</div>
+          <div class="nd-name">Static + API Proxy</div>
+          <div class="nd-sub">Express on :3133 · serve-3133.js<br/>http-proxy-middleware · /api passthrough</div>
+          <div class="nd-badge b-sky">Admin web hosting</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Authenticated request</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- Layer 3: Core Business Services (with AI + Auth sub-rows) -->
+  <div class="layer lc-service">
+    <div class="layer-tag">Core Business Services · Spring Boot 2.4 · Multi-module Maven</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">👤</div>
+          <div class="nd-name">User Service</div>
+          <div class="nd-sub">Profile · Social graph<br/>Follow · Photos · Prompts</div>
+          <div class="nd-badge b-purple">MongoDB CRUD</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📅</div>
+          <div class="nd-name">Event Service</div>
+          <div class="nd-sub">Create · RSVP · Invite<br/>Location · Calendar sync</div>
+          <div class="nd-badge b-purple">Geo indexed</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🔍</div>
+          <div class="nd-name">Discovery Service</div>
+          <div class="nd-sub">OpenAI embeddings · cosine-similarity ranking<br/>Multi-dimensional user context · ForYou feed</div>
+          <div class="nd-badge b-teal">AI-enhanced · 22.8% engagement lift</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">💬</div>
+          <div class="nd-name">Chat Service</div>
+          <div class="nd-sub">Spring WebSocket · STOMP<br/>1:1 · group messaging</div>
+          <div class="nd-badge b-sky">Realtime · SockJS</div>
+        </div>
+      </div>
+
+      <div class="sub-row">
+        <div class="sub-tag">AI / Intelligence</div>
+        <div class="sub-items"><b>OpenAI GPT-4o</b> · OpenAI Embeddings (cosine-similarity over multi-dim user context) · Bio &amp; emoji generation · Deterministic fallback</div>
+      </div>
+
+      <div class="sub-row">
+        <div class="sub-tag">Auth &amp; Security</div>
+        <div class="sub-items"><b>Spring Security</b> · JWT (JJWT) · OAuth2 (Google + Facebook SSO) · @PreAuthorize RBAC · BCrypt</div>
+      </div>
+
+      <div class="sub-row">
+        <div class="sub-tag">Integrations</div>
+        <div class="sub-items">Firebase FCM · AWS S3 · AWS SNS · Google Maps · Google Calendar · Easemob IM SDK</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">MongoDB driver · Spring Data</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- Layer 4: Data -->
+  <div class="layer lc-data">
+    <div class="layer-tag">Data Layer</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🍃</div>
+          <div class="nd-name">MongoDB</div>
+          <div class="nd-sub">Primary document DB<br/>Spring Data MongoDB</div>
+          <div class="nd-badge b-yellow">Users · Events · Messages</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🌍</div>
+          <div class="nd-name">Geospatial Queries</div>
+          <div class="nd-sub">2dsphere index · Geo near<br/>Aggregation pipelines</div>
+          <div class="nd-badge b-teal">Location-based discovery</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">⚡</div>
+          <div class="nd-name">Caffeine Cache</div>
+          <div class="nd-sub">In-memory L1 cache<br/>100K entries · 15-min TTL</div>
+          <div class="nd-badge b-yellow">Place photos · user profiles</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn">
+    <div class="conn-line"></div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-text">Build · package · deploy</div>
+    <div class="conn-arrow">↓</div>
+    <div class="conn-line"></div>
+  </div>
+
+  <!-- Layer 5: CI/CD & Delivery -->
+  <div class="layer lc-cicd">
+    <div class="layer-tag">CI / CD &amp; Delivery</div>
+    <div class="layer-inner">
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">⚙️</div>
+          <div class="nd-name">GitHub Actions</div>
+          <div class="nd-sub">Maven build → Docker → ECR<br/>Push to main triggers</div>
+          <div class="nd-badge b-sky">build.yml · ecr.yml</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🐳</div>
+          <div class="nd-name">Docker → AWS ECR</div>
+          <div class="nd-sub">OpenJDK 11 · linux/amd64<br/>COMMIT_SHA tagging · us-west-2</div>
+          <div class="nd-badge b-sky">Multi-service containers</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🖥️</div>
+          <div class="nd-name">EC2 Runtime</div>
+          <div class="nd-sub">Docker pull + run · release.sh<br/>Self-healing health checks</div>
+          <div class="nd-badge b-green">Production server</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📱</div>
+          <div class="nd-name">Expo EAS</div>
+          <div class="nd-sub">iOS · Android builds<br/>OTA updates · eas.json profiles</div>
+          <div class="nd-badge b-blue">Live mobile updates</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend (5 layer colors) -->
+  <div class="legend">
+    <div class="li"><div class="li-dot" style="background:#bfdbfe;border:1px solid #93c5fd;"></div>Client</div>
+    <div class="li"><div class="li-dot" style="background:#bbf7d0;border:1px solid #86efac;"></div>Proxy / Hosting</div>
+    <div class="li"><div class="li-dot" style="background:#e9d5ff;border:1px solid #d8b4fe;"></div>Business Services</div>
+    <div class="li"><div class="li-dot" style="background:#fde68a;border:1px solid #fcd34d;"></div>Data</div>
+    <div class="li"><div class="li-dot" style="background:#bae6fd;border:1px solid #7dd3fc;"></div>CI/CD &amp; Delivery</div>
+  </div>
+
+</section>
+<section>
+  <h2 class="section-header">AI integration — three production features</h2>
+  <div class="cards-3">
+
+    <div class="card">
+      <div class="card-title">Embedding-powered discovery <span style="font-size:11px;font-weight:500;color:var(--text-muted);">(22.8% engagement lift)</span></div>
+      <div class="card-body">
+        Spring Boot Discovery Service · OpenAI embeddings on user-profile features · real-time <strong>cosine-similarity ranking</strong> over <strong>multi-dimensional user context</strong> · powers the ForYou feed.
+      </div>
+      <div class="clever"><strong>What's clever:</strong> Embeddings capture latent semantic context that hand-tuned signals miss. Lift measured as daily engagement increase over the prior heuristic baseline.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Bio generation</div>
+      <div class="card-body">
+        <code>POST /users/{id}/bio:generate</code> · <code>GPT-4o</code> · temperature 0 · 3× retry · sanitize → validate (10–20 words, English-only, no PII) · Caffeine cache 100K entries / 15-min TTL.
+      </div>
+      <div class="clever"><strong>What's clever:</strong> AI failure ≠ user failure. Deterministic fallback ("Student at {school}, in {location}, into {tags}") activates if validation fails.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Friend recommendation</div>
+      <div class="card-body">
+        Multi-signal scoring — common-friend decay above 5, location boost, freshness bonus for new users (+8/+4/+2 by 30/90/180-day age band), random perturbation ±1, true random sampling via MongoDB <code>$sample</code>.
+      </div>
+      <div class="clever"><strong>What's clever:</strong> Designed against industry playbooks — Facebook, LinkedIn, Twitter, Instagram patterns referenced before designing. Config-driven via <code>application.properties</code> — tune weights without redeploy.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">School abbreviation search</div>
+      <div class="card-body">
+        Multi-priority match (exact abbrev &gt; name contains &gt; abbrev contains) · dedup via Set · merged with third-party API · MongoDB indexed.
+      </div>
+      <div class="clever"><strong>What's clever:</strong> Respects user intent. "MIT" returns MIT, not 50 colleges with "MIT" in the name.</div>
+    </div>
+
+  </div>
+</section>
+<section>
+  <h2 class="section-header">How I built it — operator signals</h2>
+  <div class="cards-2">
+
+    <div class="card">
+      <div class="card-title">Same constitution</div>
+      <div class="card-body">
+        Claude Code + MCP + a <code>CLAUDE.md</code> constitution is how I work. <code>joyn-mobile/CLAUDE.md</code> documents the design-system rules, naming conventions, debug overlays, and component patterns — the AI follows that, not improvises.
+      </div>
+      <div class="code-excerpt">## Coding standards
+
+### Use design system
+@design-system/foundation
+  - Foundation level tokens (raw values)
+@design-system/semantic
+  - Contextual tokens (intent-based)
+@design-system/component
+  - UI presentation only, no business logic</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">No silent failures</div>
+      <div class="card-body">
+        syncso.com runs on EC2 behind Nginx. A systemd timer pings 4 endpoints every 5 minutes. If a check fails, SES emails me. Auto-restart fires with 30-min alert cooldown and 2-hour restart cooldown. TLS auto-renews via Let's Encrypt. Health checks are dry-run testable.
+      </div>
+      <div class="clever"><strong>Operational discipline:</strong> production reliability is a design concern, not an afterthought.</div>
+    </div>
+
+  </div>
+</section>
+<footer class="footer">
+  <a href="../">← Back to portfolio home</a>
+  <span class="footer-sep">·</span>
+  <a href="https://drive.google.com/file/d/1qkjEHnDjHaO6iA5ren-EMEqqXrYHlT2g/view?usp=sharing" target="_blank" rel="noopener">Demo video walkthrough</a>
+  <span class="footer-sep">·</span>
+  <a href="https://syncso.com" target="_blank" rel="noopener">Live site</a>
+</footer>
+</main>
+</body>
+</html>

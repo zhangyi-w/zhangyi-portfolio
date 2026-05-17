@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova (Zhangyi) Wang · Portfolio</title>
+<style>
+:root {
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --text: #1f2024;
+  --text-muted: #5a6573;
+  --accent: #1e3a8a;
+  --accent-soft: #e8edf7;
+  --accent-underline: rgba(30,58,138,0.3);
+  --border: #e3dfd4;
+  --border-strong: #c9c3b3;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.page { max-width: 1100px; margin: 0 auto; padding: 40px 28px 56px; }
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-underline);
+  text-underline-offset: 2px;
+}
+a:hover { text-decoration-color: var(--accent); }
+
+h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
+
+/* Hero */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: 36px;
+}
+.hero h1 { font-size: 32px; font-weight: 700; color: var(--text); }
+.hero .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+.hero .contact { font-size: 13px; color: var(--text-muted); margin-top: 10px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.hero .contact a { color: var(--text-muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.hero .contact a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.hero .ctas { display: flex; gap: 8px; flex-shrink: 0; }
+.hero .cta {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.hero .cta:hover { border-color: var(--accent); color: var(--accent); }
+.hero .cta.primary { background: var(--accent); color: white; border-color: var(--accent); }
+.hero .cta.primary:hover { background: #16306f; color: white; }
+
+/* Section header */
+.section-header {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+section { margin-bottom: 44px; }
+
+/* About section */
+.about {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  padding: 18px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+/* Featured project card */
+.featured {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 22px 26px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+.featured-tag {
+  position: absolute;
+  top: -10px;
+  left: 22px;
+  background: var(--accent);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+.featured h3 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.featured .featured-role { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+.featured-desc { font-size: 14px; color: var(--text); margin-bottom: 16px; line-height: 1.55; }
+.featured-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.featured-metric {
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.featured-metric .v { font-size: 22px; font-weight: 700; color: var(--accent); }
+.featured-metric .l { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-top: 3px; }
+.featured-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 12px;
+}
+.featured-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.featured-cta:hover { background: #16306f; }
+
+/* Experience / Research card */
+.exp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.exp-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.exp-company { font-size: 16px; font-weight: 700; color: var(--text); }
+.exp-role { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-left: 6px; }
+.exp-dates { font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+.exp-tech { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-style: italic; }
+.exp-bullets { padding-left: 18px; }
+.exp-bullets li { font-size: 13px; line-height: 1.55; color: var(--text); margin-bottom: 4px; }
+
+/* Projects grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+}
+.project-card .pc-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.project-card .pc-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+
+/* Education */
+.education {
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  box-shadow: var(--shadow);
+}
+.education .edu-school { font-weight: 700; color: var(--text); }
+.education .edu-detail { color: var(--text-muted); }
+.education .edu-dates { color: var(--text-muted); font-weight: 600; font-size: 12px; white-space: nowrap; }
+
+/* Skills */
+.skill-group { margin-bottom: 12px; }
+.skill-group-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 6px; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.skill-tag {
+  font-size: 11.5px;
+  padding: 3px 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+}
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+.footer a { color: var(--text-muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.footer-sep { color: var(--border-strong); user-select: none; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page { padding: 24px 16px 40px; }
+  .hero { flex-direction: column; align-items: stretch; }
+  .hero h1 { font-size: 26px; }
+  .featured-metrics { grid-template-columns: 1fr; }
+  .projects-grid { grid-template-columns: 1fr; }
+}
+
+@media print {
+  body { background: white; font-size: 11pt; }
+  .page { padding: 0; max-width: none; }
+  section { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <h1>Nova (Zhangyi) Wang</h1>
+      <div class="subtitle">AI-native full-stack builder · ex-CTO · Michigan CS + Cognitive Science</div>
+      <div class="contact">
+        <a href="mailto:zhangyiw2001@gmail.com">zhangyiw2001@gmail.com</a>
+        <span>·</span>
+        <a href="https://linkedin.com/in/zhangyi-wang" target="_blank" rel="noopener">LinkedIn</a>
+        <span>·</span>
+        <span>Ann Arbor, MI</span>
+        <span>·</span>
+        <span>310-873-8012</span>
+      </div>
+    </div>
+    <div class="ctas">
+      <a class="cta primary" href="https://syncso.com" target="_blank" rel="noopener">Live site →</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section>
+    <div class="about">
+      AI-native builder. Ex-CTO who shipped a full-stack social platform to 2,500+ users while finishing my CS + Cognitive Science degree at Michigan. I default to building, measuring, and shipping fast — Claude Code + MCP is my daily workflow, embeddings + RAG + LLM-tooling is my comfort zone.
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECT -->
+  <section>
+    <h2 class="section-header">Featured project</h2>
+    <div class="featured">
+      <div class="featured-tag">Featured project</div>
+      <h3>SyncSo</h3>
+      <div class="featured-role">CTO · Jun 2025 – Present</div>
+      <div class="featured-desc">
+        Architected and launched a full-stack social discovery platform end-to-end across React Native and a microservice-oriented Spring Boot backend. Engineered the Discovery Service with OpenAI embeddings + real-time cosine-similarity ranking over multi-dimensional user context.
+      </div>
+      <div class="featured-metrics">
+        <div class="featured-metric"><div class="v">2.5K+</div><div class="l">Users</div></div>
+        <div class="featured-metric"><div class="v">22.8%</div><div class="l">Engagement lift</div></div>
+        <div class="featured-metric"><div class="v">CTO</div><div class="l">Role</div></div>
+      </div>
+      <div class="featured-tags">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">MongoDB</span>
+        <span class="tag">React Native</span>
+        <span class="tag">AWS</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Expo EAS</span>
+        <span class="tag">OpenAI Embeddings</span>
+      </div>
+      <a class="featured-cta" href="./syncso/">View detailed system brief →</a>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section>
+    <h2 class="section-header">Work experience</h2>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">COOCAA TV</span><span class="exp-role">· Software Engineer Intern</span></div>
+        <div class="exp-dates">May 2024 – Aug 2024</div>
+      </div>
+      <div class="exp-tech">Go (Gin) · React · LangChainGo · OpenAI API · MongoDB</div>
+      <ul class="exp-bullets">
+        <li>Built an internal media-streaming application: React frontend integrated with a high-performance Go (Gin) REST API.</li>
+        <li>Engineered an AI-driven recommendation service using LangChainGo + OpenAI API for context-aware suggestions tailored to user history.</li>
+        <li>Designed a scalable MongoDB data-access layer for complex metadata with reliable, low-latency retrieval.</li>
+      </ul>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">Skyworth</span><span class="exp-role">· Software Engineer Intern</span></div>
+        <div class="exp-dates">May 2023 – Aug 2023</div>
+      </div>
+      <div class="exp-tech">Python · RAG · FastAPI · LangChain · Redis</div>
+      <ul class="exp-bullets">
+        <li>Engineered a production-ready RAG agent with FastAPI + LangChain that lifted grounded-answer faithfulness to <strong>90%</strong>.</li>
+        <li>Optimized ingestion via Markdown-aware structural splitting that preserved complex system tables — context fragmentation down <strong>20%</strong>.</li>
+        <li>Architected a Redis-backed Semantic Cache that cut recurring-query latency to <strong>&lt;50ms</strong>, materially lowering LLM API costs.</li>
+      </ul>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">Shanghai Ruizhao Technology</span><span class="exp-role">· Software Engineer Intern</span></div>
+        <div class="exp-dates">May 2022 – Aug 2022</div>
+      </div>
+      <div class="exp-tech">Vue · Python · NLP &amp; image-generation APIs</div>
+      <ul class="exp-bullets">
+        <li>Designed a state-driven interactive quiz engine in Vue that digitized cognitive-science methodologies.</li>
+        <li>Built an async Python pipeline orchestrating third-party NLP + image-generation APIs for real-time, context-aware learning.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section>
+    <h2 class="section-header">Research experience</h2>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">University of Michigan</span><span class="exp-role">· Research Assistant (Supervisor: Lin Ma)</span></div>
+        <div class="exp-dates">Oct 2024 – May 2025</div>
+      </div>
+      <div class="exp-tech">Python · LLMs (GPT-4 / Llama) · XGBoost · SQL</div>
+      <ul class="exp-bullets">
+        <li>Architected a Python framework leveraging LLMs to synthesize <strong>10,000+ realistic SQL workloads</strong> grounded in industry benchmarks (TPC-C, TPC-H) for Lakehouse performance evaluation.</li>
+        <li>Developed an ML-based performance predictor — SQL-parsing feature extractor + XGBoost regression on historical query telemetry.</li>
+      </ul>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">Northeastern University</span><span class="exp-role">· Research Assistant (Supervisor: Qiang Wang)</span></div>
+        <div class="exp-dates">Sep 2023 – May 2024</div>
+      </div>
+      <div class="exp-tech">Vue/UniApp · Java · SpringBoot · MySQL · ChatGLM · DeepSeek · Docker</div>
+      <ul class="exp-bullets">
+        <li>Built a containerized SpringBoot backend for virtual-interviewer management; optimized MySQL 8 queries with MyBatis Plus, integrated ChatGLM/DeepSeek via async tasks + SSE for real-time streaming evaluation.</li>
+        <li>Developed a high-fidelity virtual interviewer pipeline combining ChatTTS (TTS) + CosyVoice (voice cloning) + Easy_Wav2Lip (audio-visual lip-sync).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PERSONAL PROJECTS -->
+  <section>
+    <h2 class="section-header">Personal projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="pc-title">Python MapReduce Framework</div>
+        <div class="pc-desc">Fault-tolerant distributed compute framework · TCP/IP socket networking · worker heartbeats · dynamic task reassignment on worker failure.</div>
+      </div>
+      <div class="project-card">
+        <div class="pc-title">Asteroids Web Game</div>
+        <div class="pc-desc">Full-stack arcade game (JavaScript · FastAPI · JWT · PostgreSQL) with authenticated leaderboards and Web Audio API procedural sound effects.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section>
+    <h2 class="section-header">Education</h2>
+    <div class="education">
+      <div>
+        <span class="edu-school">University of Michigan</span>
+        <span class="edu-detail"> · B.S. Computer Science &amp; Cognitive Science · GPA 3.8 / 4.0</span>
+      </div>
+      <div class="edu-dates">Sep 2021 – May 2025</div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <h2 class="section-header">Technical skills</h2>
+
+    <div class="skill-group">
+      <div class="skill-group-label">Languages</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">C/C++</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Go</span>
+        <span class="skill-tag">C#</span>
+        <span class="skill-tag">R</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Assembly</span>
+        <span class="skill-tag">HTML</span>
+        <span class="skill-tag">CSS</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">Full-Stack</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Spring Boot</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">React Native</span>
+        <span class="skill-tag">Vue 3</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">FastAPI</span>
+        <span class="skill-tag">Gin</span>
+        <span class="skill-tag">Flask</span>
+        <span class="skill-tag">AWS (EC2/S3)</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">CI/CD</span>
+        <span class="skill-tag">GitHub Actions</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">AI &amp; Data</div>
+      <div class="skill-tags">
+        <span class="skill-tag">LLMs (GPT/Claude/Llama)</span>
+        <span class="skill-tag">RAG</span>
+        <span class="skill-tag">Transformer</span>
+        <span class="skill-tag">CNN</span>
+        <span class="skill-tag">ViT</span>
+        <span class="skill-tag">OpenAI Embeddings</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">Redis</span>
+        <span class="skill-tag">SQLite</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">Tools &amp; Testing</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">Maven</span>
+        <span class="skill-tag">Bash</span>
+        <span class="skill-tag">PyTest</span>
+        <span class="skill-tag">Cypress</span>
+        <span class="skill-tag">ESLint</span>
+        <span class="skill-tag">Prettier</span>
+        <span class="skill-tag">Pylint</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a href="mailto:zhangyiw2001@gmail.com">zhangyiw2001@gmail.com</a>
+    <span class="footer-sep">·</span>
+    <a href="https://linkedin.com/in/zhangyi-wang" target="_blank" rel="noopener">LinkedIn</a>
+    <span class="footer-sep">·</span>
+    <a href="./syncso/">SyncSo system brief</a>
+    <span class="footer-sep">·</span>
+    <a href="https://syncso.com" target="_blank" rel="noopener">Live site</a>
+  </footer>
+
+</main>
+</body>
+</html>
