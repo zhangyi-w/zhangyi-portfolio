@@ -8,6 +8,22 @@
  tg.addEventListener("click",function(){root.classList.toggle("light");
   var l=root.classList.contains("light");try{ls&&ls.setItem("nv-theme",l?"light":"dark");}catch(e){}lbl();});
  (document.body||root).appendChild(tg);
+
+ // global sticky top nav
+ var cl=document.querySelector('link[href$="site.css"]');
+ var base=cl?cl.getAttribute("href").replace(/assets\/site\.css.*$/,""):"";
+ var path=location.pathname;
+ function seg(s){return s?path.indexOf("/"+s+"/")>-1
+   :!/\/(syncso|b2c|b2b|styles)\//.test(path);}
+ var items=[["","Home"],["syncso","SyncSo"],["b2c","B2C"],["b2b","B2B"]];
+ var nav=document.createElement("nav");nav.className="topnav";
+ var links=document.createElement("div");links.className="links";
+ items.forEach(function(it){var a=document.createElement("a");
+  a.href=base+(it[0]?it[0]+"/index.html":"index.html");
+  a.textContent=it[1];if(seg(it[0]))a.className="active";links.appendChild(a);});
+ nav.appendChild(links);
+ (document.body||root).insertBefore(nav,(document.body||root).firstChild);
+
  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
  var rail=document.querySelector(".scroll-rail i");
  if(rail){function os(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;

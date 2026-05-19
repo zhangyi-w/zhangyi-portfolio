@@ -339,3 +339,20 @@ html.light .scroll-rail i{box-shadow:0 0 12px rgba(14,169,140,.45)}
   text-transform:uppercase;color:var(--accent)}
 html.light .story .st,html.light .story .sb strong{color:#12151c}
 @media (max-width:700px){.story::after{display:none}}
+
+/* ── Global sticky top nav ── */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;
+  gap:16px;padding:12px clamp(16px,4vw,40px);
+  font-family:"JetBrains Mono",monospace;font-size:13px;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-2)}
+.topnav .links{display:flex;gap:6px;flex-wrap:wrap;padding-right:104px}
+.topnav a{color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:999px;
+  letter-spacing:.06em;text-transform:uppercase;transition:color .15s,background .15s,border-color .15s;
+  border:1px solid transparent}
+.topnav a:hover{color:var(--accent)}
+.topnav a.active{color:var(--accent);background:var(--panel);border-color:var(--line-2)}
+.nav{display:none}                   /* retire per-page inline pill nav */
+@media (max-width:640px){.topnav .links{padding-right:84px}
+  .topnav a{padding:5px 9px;font-size:11px}}
