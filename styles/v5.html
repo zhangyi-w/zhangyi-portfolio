@@ -1,14 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zhangyi Wang · Portfolio</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css">
-<script>try{document.documentElement.classList[(localStorage.getItem("nv-theme")!=="dark")?"add":"remove"]("light")}catch(e){document.documentElement.classList.add("light")}</script>
-</head>
+<title>Style 5 · Bold Modern</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+
+:root{--bg:#f4f5ff;--surface:#fff;--text:#15131f;--muted:#6a6780;--accent:#4f46e5;--accent2:#15131f;--line:#e5e3f5}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:16px;line-height:1.6;color:var(--text);background:var(--bg)}
+.page{max-width:1040px;margin:0 auto;padding:44px 28px 64px}
+a{color:var(--accent);text-decoration:none}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;letter-spacing:-.03em;line-height:1.0}
+.hero{background:var(--accent2);color:#fff;border-radius:22px;padding:48px 40px;margin-bottom:40px}
+.hero h1{font-size:clamp(38px,6.5vw,72px);color:#fff}
+.hero .subtitle{font-size:17px;color:#b9b6d8;margin-top:14px;font-weight:500}
+.hero .contact{font-size:13px;color:#b9b6d8;margin-top:18px;display:flex;flex-wrap:wrap;gap:14px}
+.hero .contact a{color:#fff;border-bottom:2px solid var(--accent)}
+section{margin-bottom:46px}
+.section-header{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:20px;display:inline-block;background:#fff;border:2px solid var(--accent);padding:6px 14px;border-radius:20px}
+.about{font-size:19px;font-weight:500;line-height:1.5;background:var(--surface);border-radius:18px;padding:26px 30px;border:2px solid var(--line)}
+.featured{background:var(--accent);color:#fff;border-radius:22px;padding:32px;position:relative}
+.featured-tag{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#c7c3ff;display:block;margin-bottom:12px}
+.featured h3{font-size:38px;color:#fff;margin-bottom:4px}
+.featured-role{font-size:13px;color:#c7c3ff;font-weight:600;margin-bottom:18px}
+.featured-desc{font-size:15px;color:#e7e5ff;margin-bottom:22px;line-height:1.6}
+.featured-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.featured-metric{background:rgba(255,255,255,.12);border-radius:14px;padding:18px;text-align:center}
+.featured-metric .v{font-family:"Bricolage Grotesque",sans-serif;font-size:30px;font-weight:800;color:#fff}
+.featured-metric .l{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#c7c3ff;margin-top:6px}
+.featured-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
+.featured .tag{font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.15);padding:4px 11px;border-radius:20px}
+.featured-cta{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--accent);font-size:13px;font-weight:800;padding:12px 20px;border-radius:24px}
+.project-card .featured-cta{background:var(--accent);color:#fff}
+.projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.project-card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:24px}
+.pc-title{font-family:"Bricolage Grotesque",sans-serif;font-size:21px;font-weight:800;margin-bottom:6px}
+.pc-desc{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.skill-tag,.tag{font-size:12px;font-weight:600;color:var(--accent);background:#fff;border:2px solid var(--line);padding:4px 11px;border-radius:20px}
+.exp-card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 26px;margin-bottom:14px}
+.exp-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:4px}
+.exp-company{font-family:"Bricolage Grotesque",sans-serif;font-size:20px;font-weight:800}
+.exp-role{font-size:13px;color:var(--muted);font-weight:600;margin-left:6px}
+.exp-dates{font-size:12px;color:var(--muted);font-weight:700}
+.exp-tech{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:8px}
+.exp-bullets{padding-left:18px}.exp-bullets li{font-size:14px;line-height:1.6;margin-bottom:5px}
+.education{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:18px 24px;font-size:14px}
+.skill-group{margin-bottom:16px}
+.skill-group-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:7px}
+.footer{border-top:2px solid var(--line);padding-top:22px;font-size:13px;font-weight:600;color:var(--muted);display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.footer a{color:var(--muted)}.footer a:hover{color:var(--accent)}.footer-sep{color:var(--line)}
+@media (max-width:760px){.projects-grid,.featured-metrics{grid-template-columns:1fr}.hero{padding:34px 24px}}
+
+
+.scroll-rail{position:fixed;top:0;left:0;right:0;height:3px;z-index:50}
+.scroll-rail i{display:block;height:100%;width:var(--p,0%);background:var(--accent);transition:width .1s linear}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;transition-delay:var(--d,0ms)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+</style></head>
 <body>
 <div class="scroll-rail"><i></i></div>
 <main class="page">
@@ -16,17 +68,16 @@
   <!-- HERO -->
   <section class="hero">
     <div>
-      <div class="kicker"><span class="dot"></span>AI Builder · Full-Stack · Ex-CTO</div>
-      <h1>Zhangyi <span class="grad">Wang</span></h1>
+      <h1>Nova (Zhangyi) Wang</h1>
       <div class="subtitle">AI-native full-stack builder · ex-CTO · Michigan CS + Cognitive Science</div>
       <div class="contact">
         <a href="mailto:zhangyiw2001@gmail.com">zhangyiw2001@gmail.com</a>
-        
+        <span>·</span>
         <a href="https://linkedin.com/in/zhangyi-wang" target="_blank" rel="noopener">LinkedIn</a>
-        
-        <span class="pill">Ann Arbor, MI</span>
-        
-        <span class="pill">310-873-8012</span>
+        <span>·</span>
+        <span>Ann Arbor, MI</span>
+        <span>·</span>
+        <span>310-873-8012</span>
       </div>
     </div>
   </section>
@@ -68,7 +119,7 @@
 
   <!-- CAPABILITIES -->
   <section>
-    <h2 class="section-header">Beyond engineering — B2B &amp; B2C range</h2>
+    <h2 class="section-header">What I build</h2>
     <div class="projects-grid">
       <div class="project-card">
         <div class="pc-title">Consumer (B2C)</div>
@@ -266,6 +317,23 @@
   </footer>
 
 </main>
-<script src="assets/site.js"></script>
-</body>
-</html>
+
+<script>
+(function(){
+ var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ var rail=document.querySelector(".scroll-rail i");
+ function os(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;rail.style.setProperty("--p",(m>0?h.scrollTop/m*100:0).toFixed(2)+"%");}
+ addEventListener("scroll",os,{passive:true});os();
+ document.querySelectorAll("main > section").forEach(function(s){s.classList.add("reveal");
+  s.querySelectorAll(".featured,.exp-card,.project-card,.skill-group,.about").forEach(function(e,i){e.classList.add("reveal");e.style.setProperty("--d",Math.min(i,8)*70+"ms");});});
+ function ac(el){var t=parseFloat(el.getAttribute("data-count")),d=parseInt(el.getAttribute("data-decimals")||"0",10),sf=el.getAttribute("data-suffix")||"",k=el.getAttribute("data-format")=="k",du=1400,st=null;
+  function f(v){return k?(v/1000).toFixed(v>=1000?1:0).replace(/\.0$/,"")+"K+":v.toFixed(d);}
+  function sp(ts){if(!st)st=ts;var p=Math.min((ts-st)/du,1),e=1-Math.pow(1-p,3);el.textContent=f(t*e)+sf;if(p<1)requestAnimationFrame(sp);else el.textContent=f(t)+sf;}
+  if(reduce){el.textContent=f(t)+sf;return;}requestAnimationFrame(sp);}
+ if(!("IntersectionObserver" in window)||reduce){document.querySelectorAll(".reveal").forEach(function(e){e.classList.add("in");});document.querySelectorAll("[data-count]").forEach(ac);return;}
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;e.target.classList.add("in");if(e.target.querySelectorAll)e.target.querySelectorAll("[data-count]").forEach(ac);io.unobserve(e.target);});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});
+ document.querySelectorAll(".reveal").forEach(function(e){io.observe(e);});
+ document.querySelectorAll("[data-count]").forEach(function(e){io.observe(e);});
+})();
+</script>
+</body></html>

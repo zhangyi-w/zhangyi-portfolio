@@ -4,534 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SyncSo · System &amp; Builder Brief</title>
-<style>
-:root {
-  --bg: #fafaf7;
-  --surface: #ffffff;
-  --text: #1f2024;
-  --text-muted: #5a6573;
-  --accent: #1e3a8a;
-  --accent-soft: #e8edf7;
-  --accent-underline: rgba(30,58,138,0.3);
-  --border: #e3dfd4;
-  --border-strong: #c9c3b3;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md: 0 2px 8px rgba(0,0,0,0.07);
-  --layer-mobile: #eef4ff;
-  --layer-mobile-border: #bfd4ff;
-  --layer-backend: #ecf7ee;
-  --layer-backend-border: #b7dcc1;
-  --layer-data: #fff3e6;
-  --layer-data-border: #f0c98c;
-  --layer-external: #f3ecfa;
-  --layer-external-border: #d4bce8;
-  --layer-infra: #eeeeee;
-  --layer-infra-border: #cccccc;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg);
-}
-
-.page {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px 28px 56px;
-}
-
-a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-color: var(--accent-underline);
-  text-underline-offset: 2px;
-}
-a:hover { text-decoration-color: var(--accent); }
-
-h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
-
-.hero {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-  padding-bottom: 24px;
-  border-bottom: 2px solid var(--accent);
-  margin-bottom: 36px;
-}
-.hero h1 {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text);
-}
-.hero .subtitle {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-top: 6px;
-  letter-spacing: 0.01em;
-}
-.hero .ctas {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.hero .cta {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  text-decoration: none;
-  transition: border-color 0.15s, color 0.15s;
-}
-.hero .cta:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.hero .cta.primary {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-.hero .cta.primary:hover { background: #16306f; color: white; }
-
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 44px;
-}
-.tile {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 18px 16px;
-  text-align: center;
-  box-shadow: var(--shadow);
-}
-.tile .value {
-  font-size: 30px;
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-.tile .label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  margin-top: 6px;
-}
-.tile.role .value { font-size: 22px; }
-
-.section-header {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  margin-bottom: 18px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.cards-3 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-bottom: 44px;
-}
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 18px 20px;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-}
-.card .card-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-.card .card-body {
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--text);
-  margin-bottom: 12px;
-}
-.card .card-body code {
-  font-family: "SF Mono", Monaco, Consolas, monospace;
-  font-size: 11.5px;
-  background: var(--accent-soft);
-  padding: 1px 5px;
-  border-radius: 3px;
-  color: var(--accent);
-}
-.card .clever {
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px dashed var(--border-strong);
-  font-size: 12.5px;
-  color: var(--accent);
-  line-height: 1.5;
-}
-.card .clever strong { color: var(--accent); }
-
-/* ─── Architecture diagram — Layer container ─── */
-.arch {
-  margin-bottom: 44px;
-}
-.arch-header {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  margin-bottom: 18px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.arch .layer {
-  margin-bottom: 6px;
-  position: relative;
-}
-.arch .layer-inner {
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 14px 16px;
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.arch .layer-tag {
-  position: absolute;
-  top: -9px;
-  left: 16px;
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 1px 10px;
-  border-radius: 20px;
-  border: 1px solid;
-}
-
-/* layer accent colours */
-.arch .lc-client  .layer-inner { border-color:#bfdbfe; background:#eff6ff; }
-.arch .lc-client  .layer-tag   { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
-
-.arch .lc-proxy   .layer-inner { border-color:#bbf7d0; background:#f0fdf4; }
-.arch .lc-proxy   .layer-tag   { background:#f0fdf4; border-color:#bbf7d0; color:#15803d; }
-
-.arch .lc-auth    .layer-inner { border-color:#fecdd3; background:#fff1f2; }
-.arch .lc-auth    .layer-tag   { background:#fff1f2; border-color:#fecdd3; color:#be123c; }
-
-.arch .lc-service .layer-inner { border-color:#e9d5ff; background:#faf5ff; }
-.arch .lc-service .layer-tag   { background:#faf5ff; border-color:#e9d5ff; color:#7e22ce; }
-
-.arch .lc-data    .layer-inner { border-color:#fde68a; background:#fefce8; }
-.arch .lc-data    .layer-tag   { background:#fefce8; border-color:#fde68a; color:#92400e; }
-
-.arch .lc-cicd    .layer-inner { border-color:#bae6fd; background:#f0f9ff; }
-.arch .lc-cicd    .layer-tag   { background:#f0f9ff; border-color:#bae6fd; color:#0369a1; }
-
-/* Node card */
-.arch .row { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
-
-.arch .nd {
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-  background:#ffffff;
-  border:1.5px solid #e2e8f0;
-  border-radius:8px;
-  padding:9px 11px;
-  min-width:90px;
-  flex:1;
-  transition:border-color .15s, box-shadow .15s;
-  cursor:default;
-  box-shadow:0 1px 3px rgba(0,0,0,0.05);
-}
-.arch .nd:hover {
-  border-color:#94a3b8;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-.arch .nd .nd-icon {
-  font-size:18px;
-  line-height:1;
-  margin-bottom:1px;
-}
-.arch .nd .nd-name {
-  font-size:10px;
-  font-weight:600;
-  color:#0f172a;
-  line-height:1.3;
-}
-.arch .nd .nd-sub {
-  font-size:8.5px;
-  color:#64748b;
-  line-height:1.4;
-}
-.arch .nd .nd-badge {
-  display:inline-block;
-  margin-top:3px;
-  font-size:7.5px;
-  font-weight:600;
-  padding:1.5px 6px;
-  border-radius:4px;
-  letter-spacing:0.3px;
-  align-self:flex-start;
-}
-.arch .b-blue   { background:#dbeafe; color:#1e40af; }
-.arch .b-green  { background:#dcfce7; color:#166534; }
-.arch .b-orange { background:#ffedd5; color:#9a3412; }
-.arch .b-purple { background:#f3e8ff; color:#6b21a8; }
-.arch .b-yellow { background:#fef9c3; color:#713f12; }
-.arch .b-sky    { background:#e0f2fe; color:#0c4a6e; }
-.arch .b-red    { background:#ffe4e6; color:#9f1239; }
-.arch .b-teal   { background:#ccfbf1; color:#115e59; }
-.arch .b-gray   { background:#f1f5f9; color:#475569; }
-
-/* Mid-row (services + sides) */
-.arch .service-row {
-  display:flex;
-  gap:8px;
-  align-items:stretch;
-}
-.arch .service-center { flex:1; min-width:0; }
-.arch .service-side {
-  width:148px;
-  flex-shrink:0;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.arch .side-grp {
-  background:#f8fafc;
-  border:1.5px dashed #cbd5e1;
-  border-radius:8px;
-  padding:10px 10px;
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-.arch .side-grp-title {
-  font-size:8px;
-  font-weight:700;
-  color:#64748b;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-bottom:2px;
-}
-.arch .snd {
-  display:flex;
-  align-items:center;
-  gap:7px;
-  background:#ffffff;
-  border:1px solid #e2e8f0;
-  border-radius:6px;
-  padding:5px 8px;
-  transition:border-color .15s, box-shadow .15s;
-  cursor:default;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);
-}
-.arch .snd:hover { border-color:#94a3b8; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
-.arch .snd .s-icon { font-size:14px; flex-shrink:0; }
-.arch .snd .s-text { display:flex; flex-direction:column; }
-.arch .snd .s-name { font-size:8.5px; font-weight:600; color:#0f172a; }
-.arch .snd .s-sub  { font-size:7.5px; color:#94a3b8; }
-
-/* Inline sub-row pill — used for AI / Security callouts inside Services layer */
-.arch .sub-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #ffffff;
-  border: 1.5px dashed #cbd5e1;
-  border-radius: 8px;
-  padding: 7px 12px;
-  margin-top: 8px;
-}
-.arch .sub-row .sub-tag {
-  font-size: 8.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #64748b;
-  flex-shrink: 0;
-}
-.arch .sub-row .sub-items {
-  font-size: 10px;
-  color: #0f172a;
-  line-height: 1.4;
-}
-.arch .sub-row .sub-items b { color: #1e3a8a; font-weight: 700; }
-
-/* Connector */
-.arch .conn {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:20px;
-  gap:8px;
-  font-size:10px;
-}
-.arch .conn-line {
-  flex:1;
-  max-width:40px;
-  height:1px;
-  background:linear-gradient(90deg, transparent, #cbd5e1, transparent);
-}
-.arch .conn-arrow {
-  font-size:12px;
-  color:#94a3b8;
-}
-.arch .conn-text {
-  font-size:8px;
-  font-weight:600;
-  color:#94a3b8;
-  letter-spacing:0.5px;
-  text-transform:uppercase;
-}
-
-/* Section divider inside service */
-.arch .svc-divider {
-  height:1px;
-  background:#e2e8f0;
-  margin:8px 0;
-}
-
-/* Legend */
-.arch .legend {
-  display:flex;
-  gap:18px;
-  justify-content:center;
-  margin-top:18px;
-  flex-wrap:wrap;
-}
-.arch .li {
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:9px;
-  color:#64748b;
-}
-.arch .li-dot {
-  width:8px;
-  height:8px;
-  border-radius:2px;
-  flex-shrink:0;
-}
-
-@media (max-width: 900px) {
-  .arch .service-row { flex-direction: column; }
-  .arch .service-side { width: 100%; }
-}
-
-@media (max-width: 600px) {
-  .hero { flex-direction: column; align-items: stretch; }
-  .hero .ctas { flex-wrap: wrap; }
-}
-
-
-.cards-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 44px;
-}
-.card .code-excerpt {
-  margin-top: 10px;
-  font-family: "SF Mono", Monaco, Consolas, monospace;
-  font-size: 11px;
-  background: #1f2024;
-  color: #c9d1d9;
-  padding: 10px 12px;
-  border-radius: 6px;
-  line-height: 1.5;
-  overflow-x: auto;
-  white-space: pre;
-}
-
-.footer {
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
-  font-size: 13px;
-  color: var(--text-muted);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-}
-.footer a {
-  color: var(--text-muted);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  padding-bottom: 1px;
-}
-.footer a:hover {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-.footer-sep {
-  color: var(--border-strong);
-  user-select: none;
-}
-
-@media (max-width: 900px) {
-  .cards-3 { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-  .tiles { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 768px) {
-  .page { padding: 24px 16px 40px; }
-  .cards-2 { grid-template-columns: 1fr; }
-}
-
-@media print {
-  body { background: white; font-size: 11pt; }
-  .page { padding: 0; max-width: none; }
-  section { page-break-inside: avoid; }
-}
-</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{document.documentElement.classList[(localStorage.getItem("nv-theme")!=="dark")?"add":"remove"]("light")}catch(e){document.documentElement.classList.add("light")}</script>
 </head>
 <body>
+<div class="scroll-rail"><i></i></div>
 <main class="page">
-<div style="margin-bottom: 24px;">
-  <a href="../index.html" style="font-size: 13px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-    ← Back to portfolio home
-  </a>
-</div>
+<div class="nav"><a href="../index.html">← Portfolio home</a><a href="../b2c/index.html">Consumer (B2C)</a><a href="../b2b/index.html">Enterprise (B2B)</a></div>
 <section class="hero">
   <div>
-    <h1>SyncSo · Zhangyi Wang</h1>
+    <div class="kicker"><span class="dot"></span>Builder Brief · System Architecture</div>
+    <h1>Sync<span class="grad">So</span></h1>
     <div class="subtitle">Full-stack social platform · iOS · Android · Web · AI-native</div>
   </div>
   <div class="ctas">
     <a class="cta primary" href="https://drive.google.com/file/d/1qkjEHnDjHaO6iA5ren-EMEqqXrYHlT2g/view?usp=sharing" target="_blank" rel="noopener">▶ Demo</a>
-    <a class="cta" href="#" target="_blank" rel="noopener">Case study</a>
-    <a class="cta" href="https://syncso.com" target="_blank" rel="noopener">Live site →</a>
+<a class="cta" href="https://syncso.com" target="_blank" rel="noopener">Live site →</a>
   </div>
 </section>
 <section class="tiles">
-  <div class="tile"><div class="value">2.5K+</div><div class="label">Users</div></div>
-  <div class="tile"><div class="value">22.8%</div><div class="label">Engagement lift</div></div>
-  <div class="tile role"><div class="value">CTO</div><div class="label">Role</div></div>
+  <div class="tile"><div class="value" data-count="2500" data-suffix="+" data-format="k">0</div><div class="label">Active users</div></div>
+  <div class="tile"><div class="value" data-count="22.8" data-suffix="%" data-decimals="1">0</div><div class="label">Engagement lift</div></div>
+  <div class="tile role"><div class="value">CTO</div><div class="label">Role · solo build</div></div>
+</section>
+<section>
+  <h2 class="section-header">Product brief — the bet behind the build</h2>
+  <div class="cards-3">
+
+    <div class="card">
+      <div class="card-title">Problem &amp; insight</div>
+      <div class="card-body">
+        Gen Z is the most digitally-connected and the loneliest generation. Existing social apps optimize for <strong>online engagement</strong>, not real-world connection — the feed rewards watching, not meeting.
+      </div>
+      <div class="clever"><strong>The bet:</strong> Make the <strong>shared plan</strong> the social object. You make friends by <em>doing things together</em>, not by posting. Offline activity is the unit of virality — "I went with 3 friends," not "I saw this online."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Why plans, not posts</div>
+      <div class="card-body">
+        Deliberately cut the public feed and follower-count vanity metrics. Optimized instead for <strong>low-friction plan creation → invite → RSVP → show up</strong> — the shortest path to a real-world meeting.
+      </div>
+      <div class="clever"><strong>Judgment:</strong> A feed would have boosted session time but not the metric that matters — acquaintances converting into friends. We measure offline meetups created, not minutes scrolled.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Where we sit</div>
+      <div class="card-body">
+        Meetup connects <strong>strangers</strong> around interests. Partiful serves people you <strong>already know</strong>. SyncSo owns the gap between: turning <strong>acquaintances into friends</strong> through repeated shared activity.
+      </div>
+      <div class="clever"><strong>Wedge:</strong> Campus communities — the acquaintance graph is dense but underused. High trust, high density, natural word-of-mouth loop.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Traction &amp; next bets</div>
+      <div class="card-body">
+        2.5K+ early users · 22.8% engagement lift from embedding-powered discovery.
+      </div>
+      <div class="clever"><strong>What I'd pull next:</strong> Group-formation loop (1:1 → recurring crew), campus ambassador GTM, and a north-star metric of <em>weekly offline meetups per active user</em>.</div>
+    </div>
+
+  </div>
 </section>
 <section class="arch">
   <h2 class="arch-header">End-to-end ownership · system architecture</h2>
@@ -631,19 +165,103 @@ h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
         </div>
       </div>
 
-      <div class="sub-row">
-        <div class="sub-tag">AI / Intelligence</div>
-        <div class="sub-items"><b>OpenAI GPT-4o</b> · OpenAI Embeddings (cosine-similarity over multi-dim user context) · Bio &amp; emoji generation · Deterministic fallback</div>
+      <div class="svc-divider"></div>
+      <div class="sub-tag" style="display:block;margin-bottom:6px;">AI / Intelligence</div>
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🧠</div>
+          <div class="nd-name">OpenAI GPT</div>
+          <div class="nd-sub">Completions API<br/>Bio &amp; emoji generation</div>
+          <div class="nd-badge b-teal">AI-enhanced</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📐</div>
+          <div class="nd-name">Embedding Service</div>
+          <div class="nd-sub">User + event vectors<br/>Cosine-similarity ranking</div>
+          <div class="nd-badge b-teal">ForYou feed</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🛟</div>
+          <div class="nd-name">Deterministic Fallback</div>
+          <div class="nd-sub">Graceful AI failure handling<br/>Validation + retry</div>
+          <div class="nd-badge b-gray">Reliability</div>
+        </div>
       </div>
 
-      <div class="sub-row">
-        <div class="sub-tag">Auth &amp; Security</div>
-        <div class="sub-items"><b>Spring Security</b> · JWT (JJWT) · OAuth2 (Google + Facebook SSO) · @PreAuthorize RBAC · BCrypt</div>
+      <div class="svc-divider"></div>
+      <div class="sub-tag" style="display:block;margin-bottom:6px;">Auth &amp; Security</div>
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🔐</div>
+          <div class="nd-name">Spring Security</div>
+          <div class="nd-sub">Filter chain · SecurityConfig<br/>Stateless session policy</div>
+          <div class="nd-badge b-orange">OncePerRequestFilter</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🪙</div>
+          <div class="nd-name">JWT</div>
+          <div class="nd-sub">TokenProvider · TokenAuthFilter<br/>JJWT 0.9 · Bearer tokens</div>
+          <div class="nd-badge b-orange">Stateless auth</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🔑</div>
+          <div class="nd-name">OAuth2 Client</div>
+          <div class="nd-sub">Google SSO · Facebook SSO<br/>spring-security-oauth2-client</div>
+          <div class="nd-badge b-orange">Third-party login</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🛡️</div>
+          <div class="nd-name">Method Security</div>
+          <div class="nd-sub">@PreAuthorize · RBAC<br/>BCryptPasswordEncoder</div>
+          <div class="nd-badge b-red">Role-based access</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📋</div>
+          <div class="nd-name">Bean Validation</div>
+          <div class="nd-sub">javax.validation API<br/>@Valid · @NotBlank · @NotNull</div>
+          <div class="nd-badge b-orange">Request validation</div>
+        </div>
       </div>
 
-      <div class="sub-row">
-        <div class="sub-tag">Integrations</div>
-        <div class="sub-items">Firebase FCM · AWS S3 · AWS SNS · Google Maps · Google Calendar · Easemob IM SDK</div>
+      <div class="svc-divider"></div>
+      <div class="sub-tag" style="display:block;margin-bottom:6px;">Integrations</div>
+      <div class="row">
+        <div class="nd">
+          <div class="nd-icon">🔥</div>
+          <div class="nd-name">Firebase FCM</div>
+          <div class="nd-sub">Push notifications<br/>Topic / token targeting</div>
+          <div class="nd-badge b-blue">Notifications</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">☁️</div>
+          <div class="nd-name">AWS SNS</div>
+          <div class="nd-sub">SMS · alerts<br/>Pub/sub messaging</div>
+          <div class="nd-badge b-blue">Messaging</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🗂️</div>
+          <div class="nd-name">AWS S3</div>
+          <div class="nd-sub">Media · images · files<br/>Object storage</div>
+          <div class="nd-badge b-yellow">Storage</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">🗺️</div>
+          <div class="nd-name">Google Maps</div>
+          <div class="nd-sub">Place · geocoding<br/>Location services</div>
+          <div class="nd-badge b-green">Maps</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">📅</div>
+          <div class="nd-name">Google Calendar</div>
+          <div class="nd-sub">Read / write events<br/>Calendar sync</div>
+          <div class="nd-badge b-green">Calendar</div>
+        </div>
+        <div class="nd">
+          <div class="nd-icon">💬</div>
+          <div class="nd-name">Easemob IM SDK</div>
+          <div class="nd-sub">Chat · groups · contacts<br/>Realtime messaging</div>
+          <div class="nd-badge b-sky">Chat infra</div>
+        </div>
       </div>
     </div>
   </div>
@@ -780,5 +398,6 @@ h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
   <a href="https://syncso.com" target="_blank" rel="noopener">Live site</a>
 </footer>
 </main>
+<script src="../assets/site.js"></script>
 </body>
 </html>

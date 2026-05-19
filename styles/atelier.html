@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier · Zhangyi Wang</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090c; --panel:#0f1115; --panel-2:#13161c;
+  --text:#edeef1; --muted:#8b909c; --faint:#5a5f6b;
+  --accent:#5eead4; --accent-2:#7c9cff; --accent-ink:#06281f;
+  --line:#1d212a; --line-2:#262b35;
+}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:16px;line-height:1.65;
+  color:var(--text);background:var(--bg);position:relative;overflow-x:hidden}
+
+/* atmosphere: aurora + grain */
+body::before{content:"";position:fixed;inset:-20%;z-index:0;pointer-events:none;
+  background:
+   radial-gradient(38vw 38vw at 18% 12%,rgba(94,234,212,.12),transparent 60%),
+   radial-gradient(42vw 42vw at 88% 4%,rgba(124,156,255,.10),transparent 60%),
+   radial-gradient(50vw 50vw at 70% 96%,rgba(94,234,212,.06),transparent 60%);
+  filter:saturate(120%);animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-3%,2%,0) scale(1.08)}}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")}
+
+.page{max-width:1080px;margin:0 auto;padding:0 28px 80px;position:relative;z-index:1}
+a{color:var(--accent);text-decoration:none}
+h1,h2,h3{letter-spacing:-.03em;line-height:1.05;font-weight:800}
+
+/* scroll progress */
+.scroll-rail{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;background:transparent}
+.scroll-rail i{display:block;height:100%;width:var(--p,0%);
+  background:linear-gradient(90deg,var(--accent-2),var(--accent));
+  box-shadow:0 0 14px rgba(94,234,212,.6);transition:width .1s linear}
+
+/* ── HERO ── */
+.hero{min-height:78vh;display:flex;flex-direction:column;justify-content:center;
+  padding:72px 0 56px;border-bottom:1px solid var(--line);margin-bottom:64px;position:relative}
+.kicker{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.kicker::before{content:"";width:42px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 0 rgba(94,234,212,.6);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(94,234,212,.5)}70%{box-shadow:0 0 0 12px rgba(94,234,212,0)}100%{box-shadow:0 0 0 0 rgba(94,234,212,0)}}
+.hero h1{font-size:clamp(46px,9vw,104px);color:#fff;max-width:16ch}
+.hero h1 .grad{background:linear-gradient(120deg,var(--accent) 10%,var(--accent-2) 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .subtitle{font-size:clamp(16px,2.1vw,21px);color:var(--muted);margin-top:26px;max-width:60ch;font-weight:500}
+.hero .contact{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;font-size:13px}
+.hero .contact a,.hero .contact span:not(.s){color:var(--text);background:var(--panel);
+  border:1px solid var(--line-2);padding:9px 16px;border-radius:999px;transition:.18s}
+.hero .contact a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.hero .contact > span.s{display:none}
+
+/* section heads */
+main{counter-reset:sec}
+section{counter-increment:sec;margin-bottom:64px}
+.section-header{display:flex;align-items:baseline;gap:16px;font-size:13px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.18em;color:var(--text);margin-bottom:28px}
+.section-header::before{content:counter(sec,decimal-leading-zero);
+  font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--accent);letter-spacing:0}
+.section-header::after{content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,var(--line-2),transparent)}
+
+/* about */
+.about{font-size:clamp(18px,2.4vw,24px);line-height:1.55;color:var(--text);
+  font-weight:500;max-width:54ch;letter-spacing:-.01em}
+.about::first-letter{font-size:1.05em}
+
+/* cards shared */
+.featured,.exp-card,.project-card,.education{background:var(--panel);
+  border:1px solid var(--line-2);border-radius:16px;position:relative;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s}
+.exp-card,.project-card{overflow:hidden}
+.featured::after,.exp-card::after,.project-card::after{content:"";position:absolute;inset:0;
+  border-radius:16px;padding:1px;background:linear-gradient(130deg,rgba(94,234,212,.0),rgba(124,156,255,.0));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s;pointer-events:none}
+.exp-card:hover,.project-card:hover{transform:translateY(-5px);border-color:var(--line-2);
+  box-shadow:0 22px 50px -28px rgba(0,0,0,.8)}
+.exp-card:hover::after,.project-card:hover::after{opacity:1;
+  background:linear-gradient(130deg,rgba(94,234,212,.5),rgba(124,156,255,.4))}
+
+/* featured */
+.featured{padding:34px 36px;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));border-color:var(--line-2)}
+.featured::before{content:"";position:absolute;inset:0;border-radius:16px;
+  background:radial-gradient(60% 80% at 100% 0%,rgba(94,234,212,.10),transparent 60%);pointer-events:none}
+.featured-tag{display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+  border:1px solid rgba(94,234,212,.35);padding:5px 12px;border-radius:999px;margin-bottom:18px}
+.featured h3{font-size:clamp(28px,4vw,42px);color:#fff;margin-bottom:6px}
+.featured-role{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);
+  letter-spacing:.04em;margin-bottom:18px}
+.featured-desc{font-size:15.5px;color:var(--text);margin-bottom:24px;line-height:1.7;max-width:74ch;opacity:.92}
+.featured-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-2);
+  border:1px solid var(--line-2);border-radius:12px;overflow:hidden;margin-bottom:24px}
+.featured-metric{background:var(--panel);padding:20px 18px}
+.featured-metric .v{font-size:32px;font-weight:800;color:#fff;letter-spacing:-.03em;
+  background:linear-gradient(120deg,var(--accent),var(--accent-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.featured-metric .l{font-size:10px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.16em;color:var(--muted);margin-top:10px}
+.featured-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.tag,.skill-tag{font-size:12px;color:var(--muted);background:var(--panel-2);
+  border:1px solid var(--line-2);padding:5px 11px;border-radius:999px;
+  transition:.16s;font-weight:500}
+.skill-tag:hover{color:var(--accent);border-color:rgba(94,234,212,.4);transform:translateY(-2px)}
+.featured-cta,.project-card .featured-cta{display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(120deg,var(--accent),var(--accent-2));color:var(--accent-ink);
+  font-size:13px;font-weight:800;padding:13px 22px;border-radius:999px;letter-spacing:.01em;
+  transition:transform .2s,box-shadow .2s}
+.featured-cta:hover,.project-card .featured-cta:hover{transform:translateY(-3px);
+  box-shadow:0 14px 30px -12px rgba(94,234,212,.5)}
+
+/* capability cards */
+.projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.project-card{padding:26px 28px;display:flex;flex-direction:column;align-items:flex-start}
+.pc-title{font-size:21px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-.02em}
+.pc-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:20px}
+
+/* experience */
+.exp-card{padding:24px 28px;margin-bottom:14px}
+.exp-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  align-items:baseline;margin-bottom:6px}
+.exp-company{font-size:19px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.exp-role{font-size:13px;color:var(--muted);font-weight:500;margin-left:8px}
+.exp-dates{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--faint);
+  letter-spacing:.02em;white-space:nowrap}
+.exp-tech{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--accent);
+  margin-bottom:12px;opacity:.85}
+.exp-bullets{padding-left:0;list-style:none}
+.exp-bullets li{font-size:14px;line-height:1.62;color:var(--text);margin-bottom:7px;
+  padding-left:20px;position:relative;opacity:.9}
+.exp-bullets li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;
+  border-radius:1px;background:var(--accent);transform:rotate(45deg);opacity:.7}
+.exp-bullets li strong{color:#fff;font-weight:700}
+
+/* education + skills */
+.education{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  padding:20px 26px;font-size:14px;color:var(--text)}
+.skill-group{margin-bottom:20px}
+.skill-group-label{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin-bottom:10px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:8px}
+
+/* footer */
+.footer{border-top:1px solid var(--line);padding-top:28px;font-size:13px;color:var(--muted);
+  display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:center}
+.footer a{color:var(--muted);transition:color .15s}.footer a:hover{color:var(--accent)}
+.footer-sep{color:var(--line-2)}
+
+/* motion */
+.reveal{opacity:0;transform:translateY(28px);
+  transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);
+  transition-delay:var(--d,0ms)}
+.reveal.in{opacity:1;transform:none}
+.hero .h-line{opacity:0;transform:translateY(30px);
+  animation:rise 1s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:var(--hd,0ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+@media (max-width:820px){.projects-grid,.featured-metrics{grid-template-columns:1fr}
+  .hero{min-height:auto;padding:56px 0 44px}}
+@media (prefers-reduced-motion:reduce){
+  .reveal,.hero .h-line{opacity:1;transform:none;animation:none;transition:none}
+  body::before{animation:none}html{scroll-behavior:auto}}
+</style></head>
+<body>
+<div class="scroll-rail"><i></i></div>
+<main class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="kicker"><span class="dot"></span>AI Builder · Full-Stack · Ex-CTO</div><h1>Zhangyi <span class="grad">Wang</span></h1>
+      <div class="subtitle">AI-native full-stack builder · ex-CTO · Michigan CS + Cognitive Science</div>
+      <div class="contact">
+        <a href="mailto:zhangyiw2001@gmail.com">zhangyiw2001@gmail.com</a>
+        <span>·</span>
+        <a href="https://linkedin.com/in/zhangyi-wang" target="_blank" rel="noopener">LinkedIn</a>
+        <span>·</span>
+        <span>Ann Arbor, MI</span>
+        <span>·</span>
+        <span>310-873-8012</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section>
+    <div class="about">
+      AI-native builder. Ex-CTO who shipped a full-stack social platform to 2,500+ users while finishing my CS + Cognitive Science degree at Michigan. I default to building, measuring, and shipping fast — Claude Code + MCP is my daily workflow, embeddings + RAG + LLM-tooling is my comfort zone.
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECT -->
+  <section>
+    <h2 class="section-header">Featured project</h2>
+    <div class="featured">
+      <div class="featured-tag">Featured project</div>
+      <h3>SyncSo</h3>
+      <div class="featured-role">CTO · Jun 2025 – Present</div>
+      <div class="featured-desc">
+        Architected and launched a full-stack social discovery platform end-to-end across React Native and a microservice-oriented Spring Boot backend. Engineered the Discovery Service with OpenAI embeddings + real-time cosine-similarity ranking over multi-dimensional user context.
+      </div>
+      <div class="featured-metrics">
+        <div class="featured-metric"><div class="v" data-count="2500" data-format="k">0</div><div class="l">Users</div></div>
+        <div class="featured-metric"><div class="v" data-count="22.8" data-suffix="%" data-decimals="1">0</div><div class="l">Engagement lift</div></div>
+        <div class="featured-metric"><div class="v">CTO</div><div class="l">Role</div></div>
+      </div>
+      <div class="featured-tags">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">MongoDB</span>
+        <span class="tag">React Native</span>
+        <span class="tag">AWS</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Expo EAS</span>
+        <span class="tag">OpenAI Embeddings</span>
+      </div>
+      <a class="featured-cta" href="./syncso/index.html">View detailed system brief →</a>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section>
+    <h2 class="section-header">What I build</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="pc-title">Consumer (B2C)</div>
+        <div class="pc-desc">Product judgment for Gen Z social — from a sharp insight to a shipped, measured app. Flagship: SyncSo, 2.5K+ users, +22.8% engagement.</div>
+        <a class="featured-cta" style="margin-top:12px;" href="./b2c/index.html">Consumer capabilities →</a>
+      </div>
+      <div class="project-card">
+        <div class="pc-title">Enterprise (B2B)</div>
+        <div class="pc-desc">AI systems that hold up in production — RAG at 90% faithfulness, &lt;50ms semantic cache, agentic streaming tooling, evaluation rigor.</div>
+        <a class="featured-cta" style="margin-top:12px;" href="./b2b/index.html">Enterprise capabilities →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section>
+    <h2 class="section-header">Work experience</h2>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">COOCAA TV</span><span class="exp-role">· Software Engineer Intern</span></div>
+        <div class="exp-dates">May 2024 – Aug 2024</div>
+      </div>
+      <div class="exp-tech">Go (Gin) · React · LangChainGo · OpenAI API · MongoDB</div>
+      <ul class="exp-bullets">
+        <li>Built an internal media-streaming application: React frontend integrated with a high-performance Go (Gin) REST API.</li>
+        <li>Engineered an AI-driven recommendation service using LangChainGo + OpenAI API for context-aware suggestions tailored to user history.</li>
+        <li>Designed a scalable MongoDB data-access layer for complex metadata with reliable, low-latency retrieval.</li>
+      </ul>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">Skyworth</span><span class="exp-role">· Software Engineer Intern</span></div>
+        <div class="exp-dates">May 2023 – Aug 2023</div>
+      </div>
+      <div class="exp-tech">Python · RAG · FastAPI · LangChain · Redis</div>
+      <ul class="exp-bullets">
+        <li>Engineered a production-ready RAG agent with FastAPI + LangChain that lifted grounded-answer faithfulness to <strong>90%</strong>.</li>
+        <li>Optimized ingestion via Markdown-aware structural splitting that preserved complex system tables — context fragmentation down <strong>20%</strong>.</li>
+        <li>Architected a Redis-backed Semantic Cache that cut recurring-query latency to <strong>&lt;50ms</strong>, materially lowering LLM API costs.</li>
+      </ul>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">Shanghai Ruizhao Technology</span><span class="exp-role">· Software Engineer Intern</span></div>
+        <div class="exp-dates">May 2022 – Aug 2022</div>
+      </div>
+      <div class="exp-tech">Vue · Python · NLP &amp; image-generation APIs</div>
+      <ul class="exp-bullets">
+        <li>Designed a state-driven interactive quiz engine in Vue that digitized cognitive-science methodologies.</li>
+        <li>Built an async Python pipeline orchestrating third-party NLP + image-generation APIs for real-time, context-aware learning.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section>
+    <h2 class="section-header">Research experience</h2>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">University of Michigan</span><span class="exp-role">· Research Assistant (Supervisor: Lin Ma)</span></div>
+        <div class="exp-dates">Oct 2024 – May 2025</div>
+      </div>
+      <div class="exp-tech">Python · LLMs (GPT-4 / Llama) · XGBoost · SQL</div>
+      <ul class="exp-bullets">
+        <li>Architected a Python framework leveraging LLMs to synthesize <strong>10,000+ realistic SQL workloads</strong> grounded in industry benchmarks (TPC-C, TPC-H) for Lakehouse performance evaluation.</li>
+        <li>Developed an ML-based performance predictor — SQL-parsing feature extractor + XGBoost regression on historical query telemetry.</li>
+      </ul>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-head">
+        <div><span class="exp-company">Northeastern University</span><span class="exp-role">· Research Assistant (Supervisor: Qiang Wang)</span></div>
+        <div class="exp-dates">Sep 2023 – May 2024</div>
+      </div>
+      <div class="exp-tech">Vue/UniApp · Java · SpringBoot · MySQL · ChatGLM · DeepSeek · Docker</div>
+      <ul class="exp-bullets">
+        <li>Built a containerized SpringBoot backend for virtual-interviewer management; optimized MySQL 8 queries with MyBatis Plus, integrated ChatGLM/DeepSeek via async tasks + SSE for real-time streaming evaluation.</li>
+        <li>Developed a high-fidelity virtual interviewer pipeline combining ChatTTS (TTS) + CosyVoice (voice cloning) + Easy_Wav2Lip (audio-visual lip-sync).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PERSONAL PROJECTS — commented out per user request
+  <section>
+    <h2 class="section-header">Personal projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="pc-title">Python MapReduce Framework</div>
+        <div class="pc-desc">Fault-tolerant distributed compute framework · TCP/IP socket networking · worker heartbeats · dynamic task reassignment on worker failure.</div>
+      </div>
+      <div class="project-card">
+        <div class="pc-title">Asteroids Web Game</div>
+        <div class="pc-desc">Full-stack arcade game (JavaScript · FastAPI · JWT · PostgreSQL) with authenticated leaderboards and Web Audio API procedural sound effects.</div>
+      </div>
+    </div>
+  </section>
+  -->
+
+  <!-- EDUCATION — commented out per user request
+  <section>
+    <h2 class="section-header">Education</h2>
+    <div class="education">
+      <div>
+        <span class="edu-school">University of Michigan</span>
+        <span class="edu-detail"> · B.S. Computer Science &amp; Cognitive Science · GPA 3.8 / 4.0</span>
+      </div>
+      <div class="edu-dates">Sep 2021 – May 2025</div>
+    </div>
+  </section>
+  -->
+
+  <!-- SKILLS -->
+  <section>
+    <h2 class="section-header">Technical skills</h2>
+
+    <div class="skill-group">
+      <div class="skill-group-label">Languages</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">C/C++</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Go</span>
+        <span class="skill-tag">C#</span>
+        <span class="skill-tag">R</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Assembly</span>
+        <span class="skill-tag">HTML</span>
+        <span class="skill-tag">CSS</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">Full-Stack</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Spring Boot</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">React Native</span>
+        <span class="skill-tag">Vue 3</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">FastAPI</span>
+        <span class="skill-tag">Gin</span>
+        <span class="skill-tag">Flask</span>
+        <span class="skill-tag">AWS (EC2/S3)</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">CI/CD</span>
+        <span class="skill-tag">GitHub Actions</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">AI &amp; Data</div>
+      <div class="skill-tags">
+        <span class="skill-tag">LLMs (GPT/Claude/Llama)</span>
+        <span class="skill-tag">RAG</span>
+        <span class="skill-tag">Transformer</span>
+        <span class="skill-tag">CNN</span>
+        <span class="skill-tag">ViT</span>
+        <span class="skill-tag">OpenAI Embeddings</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">Redis</span>
+        <span class="skill-tag">SQLite</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-label">Tools &amp; Testing</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">Maven</span>
+        <span class="skill-tag">Bash</span>
+        <span class="skill-tag">PyTest</span>
+        <span class="skill-tag">Cypress</span>
+        <span class="skill-tag">ESLint</span>
+        <span class="skill-tag">Prettier</span>
+        <span class="skill-tag">Pylint</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a href="mailto:zhangyiw2001@gmail.com">zhangyiw2001@gmail.com</a>
+    <span class="footer-sep">·</span>
+    <a href="https://linkedin.com/in/zhangyi-wang" target="_blank" rel="noopener">LinkedIn</a>
+    <span class="footer-sep">·</span>
+    <a href="./syncso/index.html">SyncSo system brief</a>
+  </footer>
+
+</main>
+<script>
+(function(){
+ var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ var rail=document.querySelector(".scroll-rail i");
+ function os(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;
+  rail.style.setProperty("--p",(m>0?h.scrollTop/m*100:0).toFixed(2)+"%");}
+ addEventListener("scroll",os,{passive:true});os();
+
+ /* hero stagger */
+ var hero=document.querySelector(".hero > div")||document.querySelector(".hero");
+ if(hero){var kids=hero.children,n=0;
+  for(var i=0;i<kids.length;i++){kids[i].classList.add("h-line");
+   kids[i].style.setProperty("--hd",(n++*120+120)+"ms");}}
+
+ document.querySelectorAll("main > section").forEach(function(s){
+  if(!s.classList.contains("hero")) s.classList.add("reveal");
+  s.querySelectorAll(".featured,.exp-card,.project-card,.skill-group,.about").forEach(function(e,i){
+   e.classList.add("reveal");e.style.setProperty("--d",Math.min(i,8)*80+"ms");});});
+
+ function ac(el){var t=parseFloat(el.getAttribute("data-count")),
+  d=parseInt(el.getAttribute("data-decimals")||"0",10),
+  sf=el.getAttribute("data-suffix")||"",k=el.getAttribute("data-format")=="k",du=1600,st=null;
+  function f(v){return k?(v/1000).toFixed(v>=1000?1:0).replace(/\.0$/,"")+"K+":v.toFixed(d);}
+  function sp(ts){if(!st)st=ts;var p=Math.min((ts-st)/du,1),e=1-Math.pow(1-p,4);
+   el.textContent=f(t*e)+sf;if(p<1)requestAnimationFrame(sp);else el.textContent=f(t)+sf;}
+  if(reduce){el.textContent=f(t)+sf;return;}requestAnimationFrame(sp);}
+
+ if(!("IntersectionObserver" in window)||reduce){
+  document.querySelectorAll(".reveal").forEach(function(e){e.classList.add("in");});
+  document.querySelectorAll("[data-count]").forEach(ac);return;}
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
+  e.target.classList.add("in");
+  if(e.target.querySelectorAll)e.target.querySelectorAll("[data-count]").forEach(ac);
+  io.unobserve(e.target);});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});
+ document.querySelectorAll(".reveal").forEach(function(e){io.observe(e);});
+ document.querySelectorAll("[data-count]").forEach(function(e){io.observe(e);});
+})();
+</script>
+</body></html>
