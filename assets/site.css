@@ -224,6 +224,22 @@ section{counter-increment:sec;margin-bottom:64px}
   margin-left:auto;margin-right:auto}
 .cred-line strong{color:var(--text)}
 
+/* ── decision flow (SVG-based thought process) ── */
+.dflow{margin:34px 0 60px}
+.dflow-svg{width:100%;max-width:760px;height:auto;display:block;margin:0 auto}
+.dflow-svg .d-node{fill:var(--panel);stroke:var(--line-2);stroke-width:1}
+.dflow-svg .d-node-dim{fill:var(--panel-2);stroke:var(--line-2);opacity:.92}
+.dflow-svg .d-node-final{fill:var(--panel);stroke:var(--accent);stroke-width:1.5}
+.dflow-svg .d-dec{fill:var(--panel-2);stroke:var(--accent);stroke-width:1.2}
+.dflow-svg .d-text{fill:var(--text);font-family:"Hanken Grotesk",sans-serif;font-size:13px;font-weight:700}
+.dflow-svg .d-dec-text{font-size:12.5px;font-weight:700}
+.dflow-svg .d-sub{fill:var(--muted);font-size:10.5px;font-weight:500}
+.dflow-svg .d-arrow{stroke:var(--accent);stroke-width:1.5;fill:none}
+.dflow-svg .d-arrow-dim{stroke:var(--muted);stroke-width:1.2;opacity:.75;fill:none}
+.dflow-svg .d-arrow-loop{stroke:var(--accent);stroke-width:1.2;opacity:.55;fill:none}
+.dflow-svg .d-branch{fill:var(--muted);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.dflow-svg .d-loop-label{fill:var(--accent);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.8}
+
 /* ── process flow ── */
 .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:34px 0 60px}
 .flow .step{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--line-2);
