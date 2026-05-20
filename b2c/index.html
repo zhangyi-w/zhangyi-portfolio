@@ -71,78 +71,85 @@
   <section>
     <h2 class="section-header">How a bet actually gets made</h2>
     <div class="dflow">
-      <svg viewBox="0 0 760 600" class="dflow-svg" role="img" aria-label="Decision flow for shipping a consumer product bet">
+      <svg viewBox="0 0 760 640" class="dflow-svg" role="img" aria-label="Decision flow for shipping a consumer product bet, with AI integration">
         <defs>
           <marker id="d-arrow-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/>
           </marker>
         </defs>
 
-        <!-- 01 Spot behavioral gap -->
-        <rect x="190" y="30" width="220" height="52" rx="11" class="d-node"/>
-        <text x="300" y="62" class="d-text" text-anchor="middle">Spot a behavioral gap</text>
+        <!-- 01 Spot behavioral gap (with AI sub) -->
+        <rect x="190" y="30" width="220" height="64" rx="11" class="d-node"/>
+        <text x="300" y="56" class="d-text" text-anchor="middle">Spot a behavioral gap</text>
+        <text x="300" y="80" class="d-ai-sub" text-anchor="middle">AI · DEEP RESEARCH AT SCALE</text>
 
-        <line x1="300" y1="82" x2="300" y2="102" class="d-arrow" marker-end="url(#d-arrow-head)"/>
+        <line x1="300" y1="94" x2="300" y2="114" class="d-arrow" marker-end="url(#d-arrow-head)"/>
 
         <!-- Diamond: revealed preference? -->
-        <polygon points="300,102 410,150 300,198 190,150" class="d-dec"/>
-        <text x="300" y="146" class="d-text d-dec-text" text-anchor="middle">Revealed</text>
-        <text x="300" y="163" class="d-text d-dec-text" text-anchor="middle">preference?</text>
+        <polygon points="300,114 410,162 300,210 190,162" class="d-dec"/>
+        <text x="300" y="158" class="d-text d-dec-text" text-anchor="middle">Revealed</text>
+        <text x="300" y="175" class="d-text d-dec-text" text-anchor="middle">preference?</text>
 
         <!-- Branch right: kill -->
-        <line x1="410" y1="150" x2="540" y2="150" class="d-arrow d-arrow-dim" marker-end="url(#d-arrow-head)"/>
-        <text x="475" y="143" class="d-branch" text-anchor="middle">no — wished for</text>
-        <rect x="540" y="125" width="180" height="50" rx="10" class="d-node d-node-dim"/>
-        <text x="630" y="155" class="d-text" text-anchor="middle">Kill the bet</text>
+        <line x1="410" y1="162" x2="540" y2="162" class="d-arrow d-arrow-dim" marker-end="url(#d-arrow-head)"/>
+        <text x="475" y="155" class="d-branch" text-anchor="middle">no — wished for</text>
+        <rect x="540" y="137" width="180" height="50" rx="10" class="d-node d-node-dim"/>
+        <text x="630" y="167" class="d-text" text-anchor="middle">Kill the bet</text>
 
         <!-- Arrow diamond → node -->
-        <line x1="300" y1="198" x2="300" y2="232" class="d-arrow" marker-end="url(#d-arrow-head)"/>
-        <text x="312" y="218" class="d-branch" text-anchor="start">yes</text>
+        <line x1="300" y1="210" x2="300" y2="244" class="d-arrow" marker-end="url(#d-arrow-head)"/>
+        <text x="312" y="230" class="d-branch" text-anchor="start">yes</text>
 
-        <!-- 02 Smallest shippable test -->
-        <rect x="190" y="232" width="220" height="62" rx="11" class="d-node"/>
-        <text x="300" y="257" class="d-text" text-anchor="middle">Smallest shippable test</text>
-        <text x="300" y="277" class="d-text d-sub" text-anchor="middle">ship + instrument behavior</text>
+        <!-- 02 Smallest shippable test (with AI sub) -->
+        <rect x="190" y="244" width="220" height="74" rx="11" class="d-node"/>
+        <text x="300" y="266" class="d-text" text-anchor="middle">Smallest shippable test</text>
+        <text x="300" y="284" class="d-text d-sub" text-anchor="middle">ship + instrument behavior</text>
+        <text x="300" y="304" class="d-ai-sub" text-anchor="middle">AI · CLAUDE CODE BUILD ACCELERATION</text>
 
-        <line x1="300" y1="294" x2="300" y2="314" class="d-arrow" marker-end="url(#d-arrow-head)"/>
+        <line x1="300" y1="318" x2="300" y2="338" class="d-arrow" marker-end="url(#d-arrow-head)"/>
 
         <!-- Diamond: behavior shifted? -->
-        <polygon points="300,314 410,362 300,410 190,362" class="d-dec"/>
-        <text x="300" y="358" class="d-text d-dec-text" text-anchor="middle">Behavior</text>
-        <text x="300" y="375" class="d-text d-dec-text" text-anchor="middle">shifted?</text>
+        <polygon points="300,338 410,386 300,434 190,386" class="d-dec"/>
+        <text x="300" y="382" class="d-text d-dec-text" text-anchor="middle">Behavior</text>
+        <text x="300" y="399" class="d-text d-dec-text" text-anchor="middle">shifted?</text>
 
         <!-- Branch right: reframe -->
-        <line x1="410" y1="362" x2="540" y2="362" class="d-arrow d-arrow-dim" marker-end="url(#d-arrow-head)"/>
-        <text x="475" y="355" class="d-branch" text-anchor="middle">no</text>
-        <rect x="540" y="337" width="180" height="50" rx="10" class="d-node d-node-dim"/>
-        <text x="630" y="362" class="d-text" text-anchor="middle">Re-frame insight</text>
-        <text x="630" y="378" class="d-text d-sub" text-anchor="middle">loop back to step 1</text>
+        <line x1="410" y1="386" x2="540" y2="386" class="d-arrow d-arrow-dim" marker-end="url(#d-arrow-head)"/>
+        <text x="475" y="379" class="d-branch" text-anchor="middle">no</text>
+        <rect x="540" y="361" width="180" height="50" rx="10" class="d-node d-node-dim"/>
+        <text x="630" y="386" class="d-text" text-anchor="middle">Re-frame insight</text>
+        <text x="630" y="402" class="d-text d-sub" text-anchor="middle">loop back to step 1</text>
 
-        <line x1="300" y1="410" x2="300" y2="430" class="d-arrow" marker-end="url(#d-arrow-head)"/>
-        <text x="312" y="424" class="d-branch" text-anchor="start">yes</text>
+        <line x1="300" y1="434" x2="300" y2="454" class="d-arrow" marker-end="url(#d-arrow-head)"/>
+        <text x="312" y="448" class="d-branch" text-anchor="start">yes</text>
 
         <!-- Diamond: retention compounds? -->
-        <polygon points="300,430 410,478 300,526 190,478" class="d-dec"/>
-        <text x="300" y="474" class="d-text d-dec-text" text-anchor="middle">Retention</text>
-        <text x="300" y="491" class="d-text d-dec-text" text-anchor="middle">compounds?</text>
+        <polygon points="300,454 410,502 300,550 190,502" class="d-dec"/>
+        <text x="300" y="498" class="d-text d-dec-text" text-anchor="middle">Retention</text>
+        <text x="300" y="515" class="d-text d-dec-text" text-anchor="middle">compounds?</text>
+
+        <!-- AI side-annotation for the measurement diamonds -->
+        <text x="498" y="448" class="d-ai-sub" text-anchor="start">AI · SIGNAL +</text>
+        <text x="498" y="462" class="d-ai-sub" text-anchor="start">COHORT ANALYSIS</text>
 
         <!-- Branch right: fix retention -->
-        <line x1="410" y1="478" x2="540" y2="478" class="d-arrow d-arrow-dim" marker-end="url(#d-arrow-head)"/>
-        <text x="475" y="471" class="d-branch" text-anchor="middle">no</text>
-        <rect x="540" y="453" width="180" height="50" rx="10" class="d-node d-node-dim"/>
-        <text x="630" y="478" class="d-text" text-anchor="middle">Fix retention first</text>
-        <text x="630" y="494" class="d-text d-sub" text-anchor="middle">before scaling spend</text>
+        <line x1="410" y1="502" x2="540" y2="502" class="d-arrow d-arrow-dim" marker-end="url(#d-arrow-head)"/>
+        <text x="475" y="495" class="d-branch" text-anchor="middle">no</text>
+        <rect x="540" y="477" width="180" height="50" rx="10" class="d-node d-node-dim"/>
+        <text x="630" y="502" class="d-text" text-anchor="middle">Fix retention first</text>
+        <text x="630" y="518" class="d-text d-sub" text-anchor="middle">before scaling spend</text>
 
-        <line x1="300" y1="526" x2="300" y2="546" class="d-arrow" marker-end="url(#d-arrow-head)"/>
-        <text x="312" y="540" class="d-branch" text-anchor="start">yes</text>
+        <line x1="300" y1="550" x2="300" y2="570" class="d-arrow" marker-end="url(#d-arrow-head)"/>
+        <text x="312" y="564" class="d-branch" text-anchor="start">yes</text>
 
-        <!-- 03 Compound, sharper next bet -->
-        <rect x="170" y="546" width="260" height="44" rx="10" class="d-node d-node-final"/>
-        <text x="300" y="573" class="d-text" text-anchor="middle">Compound — sharper next bet</text>
+        <!-- 03 Compound, sharper next bet (with AI sub) -->
+        <rect x="170" y="570" width="260" height="58" rx="10" class="d-node d-node-final"/>
+        <text x="300" y="592" class="d-text" text-anchor="middle">Compound — sharper next bet</text>
+        <text x="300" y="613" class="d-ai-sub" text-anchor="middle">AI · DRAFTS THE NEXT HYPOTHESIS</text>
 
         <!-- Loop-back arrow: from final node left → up → into node 1 left -->
-        <path d="M 170,568 C 50,568 50,56 190,56" class="d-arrow-loop" marker-end="url(#d-arrow-head)" stroke-dasharray="5 4"/>
-        <text x="40" y="312" class="d-loop-label" text-anchor="middle" transform="rotate(-90 40 312)">evidence sharpens the next insight</text>
+        <path d="M 170,599 C 50,599 50,62 190,62" class="d-arrow-loop" marker-end="url(#d-arrow-head)" stroke-dasharray="5 4"/>
+        <text x="40" y="330" class="d-loop-label" text-anchor="middle" transform="rotate(-90 40 330)">evidence sharpens the next insight</text>
       </svg>
     </div>
   </section>
