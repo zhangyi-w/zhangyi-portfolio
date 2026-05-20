@@ -211,7 +211,7 @@ section{counter-increment:sec;margin-bottom:64px}
 .anchor .a-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;
   letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
 .anchor .a-title{font-size:clamp(26px,4.2vw,38px);font-weight:800;color:var(--text);
-  margin:10px 0 4px;line-height:1.1}
+  margin:22px 0 4px;line-height:1.1}
 .anchor .a-role{font-size:12px;color:var(--muted);font-family:"JetBrains Mono",monospace;
   letter-spacing:.08em}
 .anchor .a-metrics{display:flex;flex-wrap:wrap;gap:30px;margin:22px 0 22px;
