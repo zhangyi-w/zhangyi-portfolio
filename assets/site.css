@@ -487,6 +487,6 @@ html.light .story .st,html.light .story .sb strong{color:#12151c}
   border:1px solid transparent}
 .topnav a:hover{color:var(--accent)}
 .topnav a.active{color:var(--accent);background:var(--panel);border-color:var(--line-2)}
-.nav{display:none}                   /* retire per-page inline pill nav */
+.nav{display:none !important}        /* retire per-page inline pill nav */
 @media (max-width:640px){.topnav .links{padding-right:84px}
   .topnav a{padding:5px 9px;font-size:11px}}
