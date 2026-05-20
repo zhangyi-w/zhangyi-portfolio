@@ -37,50 +37,71 @@
     <div class="a-judgment">The team needed a production RAG agent on a complex technical knowledge base full of system tables. I made two calls the standard cookbook didn't: <strong>Markdown-aware structural splitting</strong> that preserved table structure instead of chunking by character count, and a <strong>Redis-backed semantic cache</strong> for recurring queries. The structural splitter cut context fragmentation by 20%; the cache pulled repeat-query latency under 50ms and materially lowered LLM API spend. Faithfulness landed at 90% on the eval set, and the cost line stayed defensible at scale.</div>
   </div>
 
-  <!-- SUPPORTING RECEIPTS -->
+  <!-- STORIES (process stages with evidence) -->
   <section>
-    <h2 class="section-header">More receipts</h2>
-    <div class="support">
-      <div class="s-card">
-        <div class="s-head">Michigan · RA (Lin Ma)</div>
-        <div class="s-title">LLM-synthesized SQL workloads for Lakehouse eval</div>
-        <div class="s-desc">Python framework using LLMs to generate realistic SQL grounded in TPC-C / TPC-H. Plus an XGBoost performance predictor trained on historical query telemetry.</div>
-        <div class="s-num">10,000+ workloads · Oct 2024 – May 2025</div>
-      </div>
-      <div class="s-card">
-        <div class="s-head">COOCAA TV · SWE Intern</div>
-        <div class="s-title">Internal AI recommendation service</div>
-        <div class="s-desc">Go (Gin) REST API with a LangChainGo + OpenAI recommendation layer over a scalable MongoDB metadata store. Internal media-streaming app end-to-end.</div>
-        <div class="s-num">Go · LangChainGo · Summer 2024</div>
-      </div>
-      <div class="s-card">
-        <div class="s-head">Family education company · Operator</div>
-        <div class="s-title">AI pipelines replacing manual ops</div>
-        <div class="s-desc">Owned commercial decisions end-to-end. Designed pricing, discounts, refunds, and staff incentives. AI replaced manual operations where it earned its keep — not where it didn't.</div>
-        <div class="s-num">Owner-operator</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STORIES -->
-  <section>
-    <h2 class="section-header">Where my judgment shows up</h2>
+    <h2 class="section-header">How I work a system</h2>
     <div class="stories">
+
       <div class="story">
-        <div class="st">Two-sided business, not just users</div>
-        <div class="sb">Inside a real, revenue-generating education business I had to hold both sides of the marketplace at once: parents who pay, students who attend, and staff with their own incentive structure. Pricing, discounts, refund logic, and staff comp had to be <strong>coherent with each other</strong> — anchor prices that made discounts feel meaningful, incentive-compatible commissions that didn't quietly reward the wrong outcome. I learned to think in object models — <strong>lead → offer → voucher → redemption → payout</strong> — before I learned the words for them.</div>
+        <div class="st">How I read the business</div>
+        <div class="sb">Before I write code I model the <strong>commercial process object model</strong> — lead → offer → voucher → redemption → payout, or whatever the equivalent shape is in this business. I price for <strong>incentive-compatibility</strong>, not gut. Which AI pipelines get built first is a function of where the pricing structure says the leverage actually is.</div>
+        <div class="ev-list">
+          <div class="ev-item">
+            <div class="ev-head">Family ed · Owner-operator</div>
+            <div class="ev-body">Pricing, discounts, refund logic, and staff comp designed to be <b>coherent with each other</b> — price anchoring on the top tier, loss aversion on the gift-back offer, incentive-compatible commissions so the structure didn't quietly reward the wrong outcome.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Family ed · Build-order judgment</div>
+            <div class="ev-body">Which manual operations got automated first was determined by <b>where the pricing structure said the leverage was</b>, not by which automation was easiest. AI replaced ops where it earned its keep, not where it was a demo.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Two-sided marketplace intuition</div>
+            <div class="ev-body">Held parents-who-pay and students-who-attend as separate object models at the same time. Object-model thinking before I had the words for it.</div>
+          </div>
+        </div>
         <div class="sp">Proves — operator instinct for commercial-process design, not just engineering</div>
       </div>
+
       <div class="story">
-        <div class="st">I take the hard note and adjust</div>
-        <div class="sb">A fellow founder pushed back hard: <strong>vibe-coding doesn't hold up once you have real users</strong>. Instead of defending it I moved to an architecture-first approach and kept shipping — the product now has <strong>2,500+ users</strong> on a clean microservices backbone, and that decision compounded for everything after it.</div>
-        <div class="sp">Proves — coachable, judgment over ego, architecture-first when it matters</div>
+        <div class="st">How I design the system</div>
+        <div class="sb">Architecture-first when it matters. The two or three early calls — <strong>chunking strategy, cache layer, eval rubric, data model</strong> — decide everything downstream. I prefer the call that's defensible at scale to the one that's fastest to ship and rewrite.</div>
+        <div class="ev-list">
+          <div class="ev-item">
+            <div class="ev-head">Skyworth · RAG architecture</div>
+            <div class="ev-body"><b>Markdown-aware structural splitting</b> instead of chunk-by-character; <b>Redis-backed semantic cache</b> for recurring queries. Two calls the standard cookbook didn't make.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">SyncSo · Discovery layer</div>
+            <div class="ev-body">Multi-dimensional OpenAI embedding rank chosen over a cold-start recommender or hand-tuned rules. Bet on semantic match compounding faster than either at small-data scale.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Founder pushback · Architecture pivot</div>
+            <div class="ev-body">Took a hard note from a fellow founder — vibe-coding doesn't hold up at user scale — and moved to an architecture-first approach. <b>Reached 2,500+ users on a clean microservices backbone</b>; the decision compounded.</div>
+          </div>
+        </div>
+        <div class="sp">Proves — architecture-first judgment, coachable, defensible early calls</div>
       </div>
+
       <div class="story">
-        <div class="st">Pricing designed, not guessed</div>
-        <div class="sb">At the family-run education company I designed packages, discounts, and staff incentives with named frameworks — <strong>price anchoring</strong> on the top tier, <strong>loss aversion</strong> on the gift-back offer, <strong>incentive-compatible payoffs</strong> so the commission structure didn't quietly reward the wrong outcome. Real revenue depended on getting it right. AI pipelines replaced manual operations; the pricing structure determined which ones got built first.</div>
-        <div class="sp">Proves — mechanism-design instinct on real money, not a textbook</div>
+        <div class="st">How I prove the metrics</div>
+        <div class="sb">The metrics enterprises actually pay for — <strong>faithfulness, latency, cost</strong> — measured on real evals, not on benchmarks of convenience. Receipts beat narratives.</div>
+        <div class="ev-list">
+          <div class="ev-item">
+            <div class="ev-head">Skyworth · RAG eval</div>
+            <div class="ev-body"><b>90% faithfulness</b> on the grounded-answer eval set, <b>&lt;50ms repeat-query latency</b> from the semantic cache, <b>−20% context fragmentation</b> from the structural splitter.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Michigan RA · Lin Ma</div>
+            <div class="ev-body"><b>10,000+ realistic SQL workloads</b> LLM-synthesized and grounded in TPC-C / TPC-H for Lakehouse performance evaluation. Plus an XGBoost predictor on historical query telemetry.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">COOCAA TV · Production service</div>
+            <div class="ev-body">End-to-end AI recommendation service in Go (Gin) + LangChainGo + OpenAI over a scalable MongoDB metadata layer. Shipped, not prototyped.</div>
+          </div>
+        </div>
+        <div class="sp">Proves — real evals on real systems, the numbers enterprises pay for</div>
       </div>
+
     </div>
   </section>
 

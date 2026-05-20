@@ -224,6 +224,15 @@ section{counter-increment:sec;margin-bottom:64px}
   margin-left:auto;margin-right:auto}
 .cred-line strong{color:var(--text)}
 
+/* ── evidence bullets inside .story ── */
+.story .ev-list{display:flex;flex-direction:column;gap:11px;margin-top:18px;
+  padding-top:16px;border-top:1px dashed var(--line-2)}
+.story .ev-item{display:flex;flex-direction:column;gap:3px}
+.story .ev-item .ev-head{font-family:"JetBrains Mono",monospace;font-size:10px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.story .ev-item .ev-body{font-size:13.5px;color:var(--muted);line-height:1.6}
+.story .ev-item .ev-body b{color:var(--text);font-weight:700}
+
 /* ── decision flow (SVG-based thought process) ── */
 .dflow{margin:34px 0 60px}
 .dflow-svg{width:100%;max-width:760px;height:auto;display:block;margin:0 auto}

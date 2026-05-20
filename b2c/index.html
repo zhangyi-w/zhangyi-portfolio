@@ -37,50 +37,71 @@
     <div class="a-judgment">Most social-discovery products either rule-engineer the feed or wait until they have enough behavioral data to train a recommender. I bet on neither — instead a <strong>multi-dimensional OpenAI embedding of user context with real-time cosine-similarity ranking</strong>. The bet was that semantic match would beat a cold-start recommender at small scale and beat hand-tuned rules everywhere. With 2,500+ live users the embedding rank produced a <strong>+22.8% engagement lift</strong> versus the rule-only baseline — compounding faster than a behavioral recommender could have at that data volume.</div>
   </div>
 
-  <!-- SUPPORTING RECEIPTS -->
+  <!-- STORIES (process stages with evidence) -->
   <section>
-    <h2 class="section-header">More receipts</h2>
-    <div class="support">
-      <div class="s-card">
-        <div class="s-head">Northeastern · RA (Qiang Wang)</div>
-        <div class="s-title">Virtual interviewer that feels human</div>
-        <div class="s-desc">SpringBoot backend, MySQL + MyBatis Plus. ChatGLM / DeepSeek via async tasks + SSE for streaming evaluation. Pipeline: ChatTTS + CosyVoice voice clone + Easy_Wav2Lip lip-sync.</div>
-        <div class="s-num">Streaming AI UX · 2023–24</div>
-      </div>
-      <div class="s-card">
-        <div class="s-head">Shanghai Ruizhao · SWE Intern</div>
-        <div class="s-title">Consumer learning experience, in code</div>
-        <div class="s-desc">State-driven Vue quiz engine digitizing cognitive-science methodologies. Async Python pipeline orchestrating third-party NLP + image-generation APIs for real-time, context-aware learning.</div>
-        <div class="s-num">Vue · Python · Summer 2022</div>
-      </div>
-      <div class="s-card">
-        <div class="s-head">Family education company · Operator</div>
-        <div class="s-title">Two-sided consumer loop, real revenue</div>
-        <div class="s-desc">Designed acquisition, activation, and retention for the user side of a two-sided business — gifting offers, behavioral nudges, referral loops — all with real revenue on the line.</div>
-        <div class="s-num">Two-sided business</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STORIES -->
-  <section>
-    <h2 class="section-header">Consumer instinct from the real world</h2>
+    <h2 class="section-header">How I work a consumer bet</h2>
     <div class="stories">
+
       <div class="story">
-        <div class="st">Two audiences, one product</div>
-        <div class="sb">At the family-run education company, parents pay and students attend — same screen has to do two different jobs. I designed the <strong>decision</strong> for the payer and the <strong>experience</strong> for the user, applying <strong>motivation theory</strong>: the drivers aren't the same, the calls-to-action aren't the same, and pretending otherwise is how products lose both sides at once.</div>
-        <div class="sp">Proves — the decision-maker vs. end-user nuance most products miss</div>
+        <div class="st">How I find a user pain point</div>
+        <div class="sb">I read for <strong>revealed</strong> preference, not stated preference — what people <em>do</em>, not what they say in a survey. The strongest insights usually live in behavioral asymmetries: who pays vs. who uses, who decides vs. who attends, who churns silently vs. who tells you why. I frame those asymmetries through <strong>motivation theory</strong> before I write a single line of product spec.</div>
+        <div class="ev-list">
+          <div class="ev-item">
+            <div class="ev-head">SyncSo · CTO</div>
+            <div class="ev-body">Read the genuine human-connection gap on social media — algorithmic feeds optimize for attention, not connection. That asymmetry became the <b>embedding-based discovery</b> bet.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Family education company · Operator</div>
+            <div class="ev-body">Parents pay, students attend — two motivations on one screen. Designed for both, separately. Most products lose one side because they pretended it was the same user.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Founder peer signal</div>
+            <div class="ev-body">A TEDx-speaker founder pushed back: <b>vibe-coding doesn't hold up once you have real users</b>. That was a behavioral signal about my own product, not just product feedback — I treated it as data.</div>
+          </div>
+        </div>
+        <div class="sp">Proves — I distinguish revealed preference from wishful thinking</div>
       </div>
+
       <div class="story">
-        <div class="st">Acquisition by design</div>
-        <div class="sb">Built gifting offers and behavioral nudges that pulled real enrollments in — using <strong>loss aversion, default effects, and the endowment effect</strong> to make signing up the path of least resistance, not a harder sell. Real customers, real revenue, real revealed-preference signal — not a growth dashboard.</div>
-        <div class="sp">Proves — applied behavioral design on revealed-preference data</div>
+        <div class="st">How I solve it</div>
+        <div class="sb">Smallest shippable thing that produces revealed preference. <strong>Architecture before implementation</strong> — the two or three early calls (data model, discovery layer, behavioral nudge) decide everything downstream. Named frameworks earn their place by doing real work, not by being cited.</div>
+        <div class="ev-list">
+          <div class="ev-item">
+            <div class="ev-head">SyncSo · Discovery layer</div>
+            <div class="ev-body">Multi-dimensional OpenAI embedding rank instead of cold-start recommender or hand-tuned rules. The bet was semantic match would beat both at small-data scale.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Family ed · Acquisition</div>
+            <div class="ev-body">Gifting offers and behavioral nudges designed with <b>loss aversion, default effects, and the endowment effect</b> — making signing up the path of least resistance, not a harder sell.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Northeastern RA · Qiang Wang</div>
+            <div class="ev-body">Virtual-interviewer pipeline that <b>feels human</b>: ChatTTS + CosyVoice voice clone + Easy_Wav2Lip lip-sync, streamed over SSE. The UX bar was indistinguishable from a real interviewer.</div>
+          </div>
+        </div>
+        <div class="sp">Proves — applied behavioral design + AI-native UX, shipped not theorized</div>
       </div>
+
       <div class="story">
-        <div class="st">Retention that compounds</div>
-        <div class="sb">Shaped the experience with <strong>habit-formation and variable-reward</strong> research so families don't just stay — they refer. Word-of-mouth from happy parents became the cheapest channel, paying for the next cohort's acquisition. Same loop SyncSo runs on: keep the user, and the user becomes acquisition.</div>
-        <div class="sp">Proves — retention instinct where churn costs real money</div>
+        <div class="st">How I know it worked</div>
+        <div class="sb">Revealed-preference metrics — engagement, retention, referral — not vanity counts. If retention doesn't compound, scaling spend is the wrong move. I run the loop on <strong>evidence</strong>, not optimism.</div>
+        <div class="ev-list">
+          <div class="ev-item">
+            <div class="ev-head">SyncSo · Result</div>
+            <div class="ev-body"><b>+22.8% engagement lift</b> on <b>2,500+ live users</b> versus the rule-only baseline. Embedding rank compounded faster than a behavioral recommender could have at that data volume.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Family ed · Retention loop</div>
+            <div class="ev-body">Word-of-mouth from happy parents became the <b>cheapest acquisition channel</b> — cohorts paid for the next cohort's onboarding. Shaped with habit-formation and variable-reward research.</div>
+          </div>
+          <div class="ev-item">
+            <div class="ev-head">Shanghai Ruizhao · Engagement</div>
+            <div class="ev-body">Vue quiz engine digitizing cognitive-science methodology — measured real-time engagement with context-aware NLP + image-generation, not click counts.</div>
+          </div>
+        </div>
+        <div class="sp">Proves — retention &amp; revealed-preference rigor, not dashboard theater</div>
       </div>
+
     </div>
   </section>
 
