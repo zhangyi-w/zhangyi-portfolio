@@ -224,6 +224,13 @@ section{counter-increment:sec;margin-bottom:64px}
   margin-left:auto;margin-right:auto}
 .cred-line strong{color:var(--text)}
 
+/* ── "How AI integrates here" line inside .story .sb ── */
+.story .sb-ai{display:block;margin-top:16px;padding-top:14px;border-top:1px dashed var(--line-2);
+  font-size:14.5px;color:var(--text);line-height:1.7}
+.story .sb-ai .ai-tag{display:block;font-family:"JetBrains Mono",monospace;font-size:10.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px}
+.story .sb-ai b,.story .sb-ai strong{color:var(--text);font-weight:700}
+
 /* ── evidence bullets inside .story ── */
 .story .ev-list{display:flex;flex-direction:column;gap:11px;margin-top:18px;
   padding-top:16px;border-top:1px dashed var(--line-2)}
