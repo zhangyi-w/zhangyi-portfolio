@@ -182,7 +182,7 @@ section{counter-increment:sec;margin-bottom:64px}
 
 /* ── anchor case block (sub-page lead) ── */
 .anchor{background:var(--panel);border:1px solid var(--line-2);border-radius:18px;
-  padding:30px 30px 28px;margin:34px 0 14px;position:relative;overflow:hidden}
+  padding:22px 30px 28px;margin:18px 0 14px;position:relative;overflow:hidden}
 .anchor::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
   background:linear-gradient(180deg,var(--accent),var(--accent-2))}
 .anchor .a-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;
