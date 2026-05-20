@@ -38,69 +38,30 @@
     <div class="a-judgment">The team needed a production RAG agent on a complex technical knowledge base full of system tables. I made two calls the standard cookbook didn't: <strong>Markdown-aware structural splitting</strong> that preserved table structure instead of chunking by character count, and a <strong>Redis-backed semantic cache</strong> for recurring queries. The structural splitter cut context fragmentation by 20%; the cache pulled repeat-query latency under 50ms and materially lowered LLM API spend. Faithfulness landed at 90% on the eval set, and the cost line stayed defensible at scale.</div>
   </div>
 
-  <!-- STORIES (process stages with evidence) -->
+  <!-- KEY CAPABILITIES -->
   <section>
-    <h2 class="section-header">How I work a system</h2>
-    <div class="stories">
+    <h2 class="section-header">Key capabilities</h2>
+    <div class="support cases">
 
-      <div class="story">
-        <div class="st">How I read the business</div>
-        <div class="sb">Before I write code I model the <strong>commercial process object model</strong> — lead → offer → voucher → redemption → payout, or whatever the equivalent shape is in this business. I price for <strong>incentive-compatibility</strong>, not gut. Which AI pipelines get built first is a function of where the pricing structure says the leverage actually is.</div>
-        <div class="ev-list">
-          <div class="ev-item">
-            <div class="ev-head">Family ed · Owner-operator</div>
-            <div class="ev-body">Pricing, discounts, refund logic, and staff comp designed to be <b>coherent with each other</b> — price anchoring on the top tier, loss aversion on the gift-back offer, incentive-compatible commissions so the structure didn't quietly reward the wrong outcome.</div>
-          </div>
-          <div class="ev-item">
-            <div class="ev-head">Family ed · Build-order judgment</div>
-            <div class="ev-body">Which manual operations got automated first was determined by <b>where the pricing structure said the leverage was</b>, not by which automation was easiest. AI replaced ops where it earned its keep, not where it was a demo.</div>
-          </div>
-          <div class="ev-item">
-            <div class="ev-head">Two-sided marketplace intuition</div>
-            <div class="ev-body">Held parents-who-pay and students-who-attend as separate object models at the same time. Object-model thinking before I had the words for it.</div>
-          </div>
-        </div>
-        <div class="sp">Proves — operator instinct for commercial-process design, not just engineering</div>
+      <div class="s-card">
+        <div class="s-head">Capability · Operator instinct</div>
+        <div class="s-title">Read the business before writing code</div>
+        <div class="s-desc">Inside a family-run education company with <b>thousands of students</b>, I owned the commercial decisions end-to-end: pricing, discounts, refund logic, staff incentives — all designed to be <b>coherent with each other</b> (price anchoring on the top tier, loss aversion on the gift-back, incentive-compatible commissions so the structure didn't quietly reward the wrong outcome). Which AI pipelines got built first was determined by <b>where the pricing structure said the leverage actually was</b>, not by which automation was easiest. Engineering with operator context — knowing what's actually worth building.</div>
+        <div class="s-num">Proof: Family ed · Owner-operator on thousands of students</div>
       </div>
 
-      <div class="story">
-        <div class="st">How I design the system</div>
-        <div class="sb">Architecture-first when it matters. The two or three early calls — <strong>chunking strategy, cache layer, eval rubric, data model</strong> — decide everything downstream. I prefer the call that's defensible at scale to the one that's fastest to ship and rewrite.</div>
-        <div class="ev-list">
-          <div class="ev-item">
-            <div class="ev-head">Skyworth · RAG architecture</div>
-            <div class="ev-body"><b>Markdown-aware structural splitting</b> instead of chunk-by-character; <b>Redis-backed semantic cache</b> for recurring queries. Two calls the standard cookbook didn't make.</div>
-          </div>
-          <div class="ev-item">
-            <div class="ev-head">SyncSo · Discovery layer</div>
-            <div class="ev-body">Multi-dimensional OpenAI embedding rank chosen over a cold-start recommender or hand-tuned rules. Bet on semantic match compounding faster than either at small-data scale.</div>
-          </div>
-          <div class="ev-item">
-            <div class="ev-head">Founder pushback · Architecture pivot</div>
-            <div class="ev-body">Took a hard note from a fellow founder — vibe-coding doesn't hold up at user scale — and moved to an architecture-first approach. <b>Reached 2,500+ users on a clean microservices backbone</b>; the decision compounded.</div>
-          </div>
-        </div>
-        <div class="sp">Proves — architecture-first judgment, coachable, defensible early calls</div>
+      <div class="s-card">
+        <div class="s-head">Capability · Architecture-first</div>
+        <div class="s-title">The early calls that decide everything downstream</div>
+        <div class="s-desc">On SyncSo, I bet on a <b>multi-dimensional OpenAI embedding rank</b> over a cold-start recommender or hand-tuned rules — and built on a clean microservices backbone from day one. When a fellow founder pushed back hard that vibe-coding doesn't hold up at user scale, I moved to <b>architecture-first immediately</b> instead of defending the prior choice. <b>2,500+ live users now run on that decision</b>, and it compounded for everything after it. The two or three architectural calls early decide whether everything downstream holds or breaks.</div>
+        <div class="s-num">Proof: SyncSo · 2,500+ users on a clean architecture</div>
       </div>
 
-      <div class="story">
-        <div class="st">How I prove the metrics</div>
-        <div class="sb">The metrics enterprises actually pay for — <strong>faithfulness, latency, cost</strong> — measured on real evals, not on benchmarks of convenience. Receipts beat narratives.</div>
-        <div class="ev-list">
-          <div class="ev-item">
-            <div class="ev-head">Skyworth · RAG eval</div>
-            <div class="ev-body"><b>90% faithfulness</b> on the grounded-answer eval set, <b>&lt;50ms repeat-query latency</b> from the semantic cache, <b>−20% context fragmentation</b> from the structural splitter.</div>
-          </div>
-          <div class="ev-item">
-            <div class="ev-head">Michigan RA · Lin Ma</div>
-            <div class="ev-body"><b>10,000+ realistic SQL workloads</b> LLM-synthesized and grounded in TPC-C / TPC-H for Lakehouse performance evaluation. Plus an XGBoost predictor on historical query telemetry.</div>
-          </div>
-          <div class="ev-item">
-            <div class="ev-head">COOCAA TV · Production service</div>
-            <div class="ev-body">End-to-end AI recommendation service in Go (Gin) + LangChainGo + OpenAI over a scalable MongoDB metadata layer. Shipped, not prototyped.</div>
-          </div>
-        </div>
-        <div class="sp">Proves — real evals on real systems, the numbers enterprises pay for</div>
+      <div class="s-card">
+        <div class="s-head">Capability · Evaluation rigor</div>
+        <div class="s-title">Real evals on real systems, not benchmark theatre</div>
+        <div class="s-desc">As Michigan RA under Lin Ma, designed a Python framework that uses LLMs to <b>synthesize 10,000+ realistic SQL workloads</b> grounded in industry benchmarks (TPC-C, TPC-H) for Lakehouse performance evaluation. Built an <b>XGBoost performance predictor</b> trained on historical query telemetry on top. The judgment: evals built around the <b>actual workload shape</b>, not what's convenient to measure. That's the difference between systems that hold at production and systems that look good on paper.</div>
+        <div class="s-num">Proof: Michigan RA · 10K+ workloads · XGBoost predictor</div>
       </div>
 
     </div>
@@ -108,7 +69,7 @@
 
   <!-- PROCESS FLOW -->
   <section>
-    <h2 class="section-header">How the work moves</h2>
+    <h2 class="section-header">How a system actually gets built</h2>
     <div class="flow">
       <div class="step"><div class="fi">01</div><div class="ft">Incentives &amp; cost</div><div class="fs">Reason about the economics around the system, not just the code.</div></div>
       <div class="farrow">→</div>
