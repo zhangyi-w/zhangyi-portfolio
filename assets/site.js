@@ -1,7 +1,7 @@
 (function(){
  var ls;try{ls=window.localStorage;}catch(e){}
  var root=document.documentElement;
- if((ls&&ls.getItem("nv-theme"))!=="dark")root.classList.add("light");
+ if(ls&&ls.getItem("nv-theme")==="light")root.classList.add("light");
  var tg=document.createElement("button");tg.className="theme-toggle";tg.type="button";
  function lbl(){tg.textContent=root.classList.contains("light")?"◑ Dark":"◐ Light";}
  lbl();
@@ -14,8 +14,8 @@
  var base=cl?cl.getAttribute("href").replace(/assets\/site\.css.*$/,""):"";
  var path=location.pathname;
  function seg(s){return s?path.indexOf("/"+s+"/")>-1
-   :!/\/(syncso|b2c|b2b|styles)\//.test(path);}
- var items=[["","Home"],["syncso","SyncSo"],["b2c","B2C"],["b2b","B2B"]];
+   :!/\/(syncso|b2c|b2b|ai|styles)\//.test(path);}
+ var items=[["","Home"],["syncso","SyncSo"],["b2c","B2C"],["b2b","B2B"],["ai","AI"]];
  var nav=document.createElement("nav");nav.className="topnav";
  var links=document.createElement("div");links.className="links";
  items.forEach(function(it){var a=document.createElement("a");
