@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI · Zhangyi Wang</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{document.documentElement.classList[(localStorage.getItem("nv-theme")!=="dark")?"add":"remove"]("light")}catch(e){document.documentElement.classList.add("light")}</script>
+</head>
+<body>
+<div class="scroll-rail"><i></i></div>
+<main class="page">
+
+  <div class="nav">
+    <a href="../index.html">← Back to portfolio home</a>
+    <a href="../b2c/index.html">Consumer (B2C) →</a>
+    <a href="../b2b/index.html">Enterprise (B2B) →</a>
+  </div>
+
+  <section class="hero">
+    <div class="eyebrow">Capabilities · AI</div>
+    <h1>Production AI systems that <span class="accent">ship</span></h1>
+    <div class="subtitle">RAG, embeddings, multimodal pipelines, and operator-side automation — deployed to real users with real metrics, not benchmark theatre.</div>
+  </section>
+
+  <!-- ANCHOR CASE -->
+  <div class="anchor">
+    <div class="a-eyebrow">Anchor case · Skyworth · AI Builder lens</div>
+    <div class="a-title">RAG calls the cookbook didn't make</div>
+    <div class="a-role">May 2023 – Aug 2023 · Python · FastAPI · LangChain · Redis</div>
+    <div class="a-metrics">
+      <div class="a-metric"><div class="v">90%</div><div class="l">Grounded-answer faithfulness</div></div>
+      <div class="a-metric"><div class="v">&lt;50ms</div><div class="l">Repeat-query latency</div></div>
+      <div class="a-metric"><div class="v">−20%</div><div class="l">Context fragmentation</div></div>
+    </div>
+    <div class="a-judgment">Two AI-specific calls the standard cookbook didn't make: <strong>Markdown-aware structural splitting</strong> that preserved table structure instead of chunk-by-character, and a <strong>Redis-backed semantic cache</strong> for recurring queries. Faithfulness landed at 90% on the eval set, repeat-query latency dropped under 50ms, and the API spend line stayed defensible at scale.</div>
+  </div>
+
+  <!-- STORIES (AI build methodology) -->
+  <section>
+    <h2 class="section-header">How I work an AI build</h2>
+    <div class="stories">
+
+      <div class="story">
+        <div class="st">How I scope an AI build</div>
+        <div class="sb">The first call decides everything downstream: <strong>which AI primitive matches the problem</strong>. RAG when grounded knowledge matters; agents when multi-step tool use matters; embedding rank when semantic similarity is the whole game; classical ML when LLM tax isn't justified. I pick by the <strong>shape of the problem</strong>, not by what's on trend. And I <strong>define the eval rubric before writing a line of pipeline code</strong> — if you can't say what "good" looks like up front, you can't tell whether the system actually got there.</div>
+        <div class="sp">Proves — primitive selection by problem shape, eval-first rigor, not hype-driven choices</div>
+      </div>
+
+      <div class="story">
+        <div class="st">How I architect for production</div>
+        <div class="sb">The two or three early calls — <strong>chunking strategy, cache layer, retrieval shape, eval rubric</strong> — decide whether the system holds up at scale or falls over at 10× load. Architecture-first, then ship the smallest production-shaped thing that can be measured. <strong>The cookbook is a starting line, not a finish line.</strong> Most production failures I've seen came from teams accepting the default chunking, default retrieval, default eval — and discovering at scale that defaults aren't tuned to their problem.</div>
+        <div class="sp">Proves — architecture-first AI builds, defensible at production load, with the right early calls</div>
+      </div>
+
+      <div class="story">
+        <div class="st">How I evaluate AI</div>
+        <div class="sb"><strong>Faithfulness, latency, cost, hallucination rate</strong> — measured on real evals built around the actual user task, not on benchmarks of convenience. If faithfulness drops below target, that's a signal to <strong>re-architect, not retry</strong>. Vibes-based "it feels good in demo" is how production-AI systems become liabilities at scale. The eval is the contract; the system is what either holds or breaks against it.</div>
+        <div class="sp">Proves — production-AI evaluation discipline, the metrics enterprises actually pay for</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AI PROJECT BANK -->
+  <section>
+    <h2 class="section-header">AI projects</h2>
+    <div class="support cases">
+
+      <div class="s-card">
+        <div class="s-head">SyncSo · CTO</div>
+        <div class="s-title">Embedding-based discovery at small-data scale</div>
+        <div class="s-desc">Bet on a <b>multi-dimensional OpenAI embedding rank</b> over a cold-start recommender or hand-tuned rules. The judgment call: semantic match compounds faster than either alternative when behavioral data is thin. With <b>2,500+ live users</b>, the embedding rank produced a <b>+22.8% engagement lift</b> versus the rule-only baseline — confirming the call at production scale.</div>
+        <div class="s-num">2,500+ users · +22.8% engagement</div>
+      </div>
+
+      <div class="s-card">
+        <div class="s-head">Michigan · RA (Lin Ma)</div>
+        <div class="s-title">LLM-synthesized SQL workloads for Lakehouse eval</div>
+        <div class="s-desc">Designed a Python framework using LLMs to <b>synthesize 10,000+ realistic SQL workloads</b> grounded in industry benchmarks (TPC-C, TPC-H) for Lakehouse performance evaluation. Built an ML-based performance predictor on top: SQL-parsing feature extractor + <b>XGBoost regression</b> trained on historical query telemetry. AI as the generator AND the predictor.</div>
+        <div class="s-num">10K+ workloads · Oct 2024 – May 2025</div>
+      </div>
+
+      <div class="s-card">
+        <div class="s-head">Northeastern · RA (Qiang Wang)</div>
+        <div class="s-title">Multimodal AI interviewer pipeline</div>
+        <div class="s-desc">Built a high-fidelity virtual interviewer that interviewees couldn't easily distinguish from a real one. Pipeline: <b>ChatTTS + CosyVoice voice cloning + Easy_Wav2Lip lip-sync</b>, streamed over SSE off a SpringBoot backend with ChatGLM / DeepSeek integration. The product judgment: a virtual interviewer fails on <b>perceptual gaps</b> — voice timing, lip-sync, response latency — not on AI conversation quality. Bet engineering on closing those gaps.</div>
+        <div class="s-num">Streaming multimodal AI · 2023–24</div>
+      </div>
+
+      <div class="s-card">
+        <div class="s-head">COOCAA TV · SWE Intern</div>
+        <div class="s-title">LangChainGo recommendation service in production</div>
+        <div class="s-desc">End-to-end AI recommendation service in <b>Go (Gin) + LangChainGo + OpenAI</b>, served from a scalable MongoDB metadata layer for internal media-streaming. Real production service, shipped, not prototyped — chosen Go for backend latency, LangChainGo for the orchestration layer.</div>
+        <div class="s-num">Go · LangChainGo · Summer 2024</div>
+      </div>
+
+      <div class="s-card">
+        <div class="s-head">Family ed · Operator</div>
+        <div class="s-title">AI pipelines replacing manual operations</div>
+        <div class="s-desc">Inside a real revenue-generating education business, owned where AI got applied and where it didn't. <b>AI replaced manual operations where it earned its keep</b> — not where it was a demo. Which pipelines got built first was determined by where the pricing structure said the leverage actually was. Operator judgment on AI deployment, not engineering for engineering's sake.</div>
+        <div class="s-num">Owner-operator · Thousands of students</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="cred-line">
+    Background: <strong>CS + Cognitive Science at Michigan</strong>. Production AI experience across <strong>RAG, embeddings, multimodal pipelines, and operator-side automation</strong>. Daily Claude Code + MCP for build acceleration. The work above ships and stays shipped.
+  </div>
+
+  <footer class="footer">
+    <a href="../index.html">Portfolio home</a>
+    <span class="sep">·</span>
+    <a href="../b2c/index.html">Consumer (B2C)</a>
+    <span class="sep">·</span>
+    <a href="../b2b/index.html">Enterprise (B2B)</a>
+    <span class="sep">·</span>
+    <a href="../syncso/index.html">SyncSo system brief</a>
+    <span class="sep">·</span>
+    <a href="mailto:zhangyiw2001@gmail.com">zhangyiw2001@gmail.com</a>
+  </footer>
+
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
