@@ -180,6 +180,50 @@ section{counter-increment:sec;margin-bottom:64px}
   letter-spacing:.16em;color:var(--muted);margin-top:10px}
 .cards-3{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:64px}
 
+/* ── anchor case block (sub-page lead) ── */
+.anchor{background:var(--panel);border:1px solid var(--line-2);border-radius:18px;
+  padding:30px 30px 28px;margin:34px 0 14px;position:relative;overflow:hidden}
+.anchor::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--accent),var(--accent-2))}
+.anchor .a-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.anchor .a-title{font-size:clamp(26px,4.2vw,38px);font-weight:800;color:var(--text);
+  margin:10px 0 4px;line-height:1.1}
+.anchor .a-role{font-size:12px;color:var(--muted);font-family:"JetBrains Mono",monospace;
+  letter-spacing:.08em}
+.anchor .a-metrics{display:flex;flex-wrap:wrap;gap:30px;margin:22px 0 22px;
+  padding:18px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+.anchor .a-metric{display:flex;flex-direction:column;gap:6px}
+.anchor .a-metric .v{font-size:clamp(24px,3.6vw,34px);font-weight:800;
+  background:linear-gradient(120deg,var(--accent) 10%,var(--accent-2) 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;
+  font-family:"Hanken Grotesk",sans-serif}
+.anchor .a-metric .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.18em;
+  color:var(--muted);font-family:"JetBrains Mono",monospace}
+.anchor .a-judgment{font-size:clamp(15px,1.75vw,16.5px);line-height:1.75;color:var(--text);
+  max-width:74ch}
+.anchor .a-judgment strong{color:var(--text);font-weight:700}
+
+/* ── supporting receipts row ── */
+.support{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0 60px}
+@media (max-width:760px){.support{grid-template-columns:1fr}}
+.support .s-card{background:var(--panel-2);border:1px solid var(--line-2);
+  border-radius:12px;padding:18px 16px;display:flex;flex-direction:column;gap:8px;
+  transition:transform .2s,border-color .2s}
+.support .s-card:hover{transform:translateY(-3px);border-color:rgba(94,234,212,.45)}
+.support .s-head{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent)}
+.support .s-title{font-size:15px;font-weight:700;color:var(--text);line-height:1.35}
+.support .s-desc{font-size:12.5px;color:var(--muted);line-height:1.6;flex:1}
+.support .s-num{font-size:13px;font-weight:700;color:var(--text);margin-top:8px;
+  font-family:"JetBrains Mono",monospace}
+
+/* ── credibility line (page foot) ── */
+.cred-line{font-size:13px;color:var(--muted);text-align:center;line-height:1.7;
+  border-top:1px solid var(--line-2);padding:34px 0 8px;margin-top:36px;max-width:72ch;
+  margin-left:auto;margin-right:auto}
+.cred-line strong{color:var(--text)}
+
 /* ── process flow ── */
 .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:34px 0 60px}
 .flow .step{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--line-2);
