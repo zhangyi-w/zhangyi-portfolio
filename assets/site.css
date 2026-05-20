@@ -132,6 +132,10 @@ section{counter-increment:sec;margin-bottom:64px}
 /* capability / generic cards */
 .projects-grid,.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .projects-grid.three{grid-template-columns:repeat(3,1fr)}
+.projects-grid .project-card{display:flex;flex-direction:column;padding:22px 22px 20px}
+.projects-grid .project-card .pc-title{margin-bottom:8px}
+.projects-grid .project-card .pc-desc{flex:1}
+.projects-grid .project-card .featured-cta{margin-top:16px;align-self:flex-start}
 .cards{grid-template-columns:repeat(3,1fr)}.cards.two{grid-template-columns:1fr 1fr}
 .project-card,.card{padding:26px 28px;display:flex;flex-direction:column;align-items:flex-start}
 .pc-title,.card .ct,.card .card-title{font-size:20px;font-weight:800;color:#fff;

@@ -25,42 +25,15 @@
     <div class="subtitle">RAG, embeddings, multimodal pipelines, and operator-side automation — deployed to real users with real metrics, not benchmark theatre.</div>
   </section>
 
-  <!-- ANCHOR CASE -->
-  <div class="anchor">
-    <div class="a-eyebrow">Anchor case · Skyworth · AI Builder lens</div>
-    <div class="a-title">RAG calls the cookbook didn't make</div>
-    <div class="a-role">May 2023 – Aug 2023 · Python · FastAPI · LangChain · Redis</div>
-    <div class="a-metrics">
-      <div class="a-metric"><div class="v">90%</div><div class="l">Grounded-answer faithfulness</div></div>
-      <div class="a-metric"><div class="v">&lt;50ms</div><div class="l">Repeat-query latency</div></div>
-      <div class="a-metric"><div class="v">−20%</div><div class="l">Context fragmentation</div></div>
-    </div>
-    <div class="a-judgment">Two AI-specific calls the standard cookbook didn't make: <strong>Markdown-aware structural splitting</strong> that preserved table structure instead of chunk-by-character, and a <strong>Redis-backed semantic cache</strong> for recurring queries. Faithfulness landed at 90% on the eval set, repeat-query latency dropped under 50ms, and the API spend line stayed defensible at scale.</div>
-  </div>
-
-  <!-- STORIES (AI build methodology) -->
+  <!-- HOW I WORK AN AI BUILD (visual flow) -->
   <section>
     <h2 class="section-header">How I work an AI build</h2>
-    <div class="stories">
-
-      <div class="story">
-        <div class="st">How I scope an AI build</div>
-        <div class="sb">The first call decides everything downstream: <strong>which AI primitive matches the problem</strong>. RAG when grounded knowledge matters; agents when multi-step tool use matters; embedding rank when semantic similarity is the whole game; classical ML when LLM tax isn't justified. I pick by the <strong>shape of the problem</strong>, not by what's on trend. And I <strong>define the eval rubric before writing a line of pipeline code</strong> — if you can't say what "good" looks like up front, you can't tell whether the system actually got there.</div>
-        <div class="sp">Proves — primitive selection by problem shape, eval-first rigor, not hype-driven choices</div>
-      </div>
-
-      <div class="story">
-        <div class="st">How I architect for production</div>
-        <div class="sb">The two or three early calls — <strong>chunking strategy, cache layer, retrieval shape, eval rubric</strong> — decide whether the system holds up at scale or falls over at 10× load. Architecture-first, then ship the smallest production-shaped thing that can be measured. <strong>The cookbook is a starting line, not a finish line.</strong> Most production failures I've seen came from teams accepting the default chunking, default retrieval, default eval — and discovering at scale that defaults aren't tuned to their problem.</div>
-        <div class="sp">Proves — architecture-first AI builds, defensible at production load, with the right early calls</div>
-      </div>
-
-      <div class="story">
-        <div class="st">How I evaluate AI</div>
-        <div class="sb"><strong>Faithfulness, latency, cost, hallucination rate</strong> — measured on real evals built around the actual user task, not on benchmarks of convenience. If faithfulness drops below target, that's a signal to <strong>re-architect, not retry</strong>. Vibes-based "it feels good in demo" is how production-AI systems become liabilities at scale. The eval is the contract; the system is what either holds or breaks against it.</div>
-        <div class="sp">Proves — production-AI evaluation discipline, the metrics enterprises actually pay for</div>
-      </div>
-
+    <div class="flow">
+      <div class="step"><div class="fi">01</div><div class="ft">Scope</div><div class="fs">Match the AI primitive (RAG · agent · embedding rank · classical ML) to the problem shape. Define the eval rubric before code.</div></div>
+      <div class="farrow">→</div>
+      <div class="step"><div class="fi">02</div><div class="ft">Architect</div><div class="fs">Chunking · cache · retrieval · eval — the 2–3 early calls that decide whether the system holds at scale. Defaults aren't tuned to your problem.</div></div>
+      <div class="farrow">→</div>
+      <div class="step"><div class="fi">03</div><div class="ft">Evaluate</div><div class="fs">Faithfulness · latency · cost — measured on real evals built around the actual user task. The eval is the contract; the system either holds or breaks against it.</div></div>
     </div>
   </section>
 
@@ -68,6 +41,13 @@
   <section>
     <h2 class="section-header">AI projects</h2>
     <div class="support cases">
+
+      <div class="s-card">
+        <div class="s-head">Skyworth · SWE Intern</div>
+        <div class="s-title">Production RAG that held up</div>
+        <div class="s-desc">Built a production RAG agent on a complex technical knowledge base. Made two calls the standard cookbook didn't: <b>Markdown-aware structural splitting</b> that preserved table structure instead of chunk-by-character, and a <b>Redis-backed semantic cache</b> for recurring queries. Faithfulness landed at <b>90%</b> on the eval set, repeat-query latency dropped <b>under 50ms</b>, and the API spend line stayed defensible at scale.</div>
+        <div class="s-num">90% faithfulness · &lt;50ms cache · −20% context · May–Aug 2023</div>
+      </div>
 
       <div class="s-card">
         <div class="s-head">SyncSo · CTO</div>
